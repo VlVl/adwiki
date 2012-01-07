@@ -1,26 +1,14 @@
 {
-  "name"          : "autodafe",
-  "description"   : "mvc framework for node with mysql orm, web sockets support, logging, routing, user roles etc",
-  "keywords"      : [ "mvc", "framework", "mysql", "orm", "websockets" ],
-  "version"       : "0.2.0",
-  "author"        : "Andrey Balakirev <balakirev.andrey@gmail.com>",
-  "contributors"  : [ "Vladimir Balakirev <bvlvl2003@rambler.ru>" ],
-  "main"          : "./framework/autodafe",
+  "name"          : "adwiki",
+  "description"   : "autodafe component for generating documentation",
+  "keywords"      : [ "autodafe", "component", "jsdoc" ],
+  "version"       : "0.0.1",
+  "author"        : "Vladimir Balakirev <bvlvl2003@rambler.ru>",
+  "main"          : "./components/jsdoc_parser.js",
   "repository"    : {
     "type" : "git",
-    "url"  : "http://github.com/jifeon/autodafe.git"
+    "url"  : "git://github.com/VlVl/adwiki.git"
   },
-  "dependencies"  : {
-    "socket.io"             : ">=0.5.2",
-    "socket.io-client"      : ">=0.7.2",
-    "node-proxy"            : ">=0.4.0",
-    "colors"                : ">=0.3.0",
-    "vows"                  : ">=0.5.8",
-    "emailjs"               : ">=0.1.8",
-    "mysql"                 : ">=0.9.0",
-    "dust.js"               : ">=0.1.0",
-    "formidable"            : ">=1.0.2",
-    "http-auth"             : ">=1.0.4"
-  },
+  "dependencies"  : {},
   "engines"       : { "node": ">=0.4.0" }
 }
