@@ -37,17 +37,17 @@ JSDocParser.prototype._init = function ( params ) {
   this._classes = {};
   this.dir = path.normalize( params.dir ) || path.normalize( '..' ); 
   this.collect_classes( this.dir );
-  //console.log( this._classes );
 }
 
 JSDocParser.prototype.parse_file = function( path ){
   var data = fs.readFileSync( path, 'utf8' ) + '';
+  if( !this.re.constructor.test( data ) ) return false;
   var blocks = [],
   inBlock = false,
   last_line = false,
   text,
 
-  lines = data.split("\n");
+  lines = data.replace(/<pre>/g, '<pre class="code">' ).split("\n");
 
   for ( var i = 0, ln = lines.length; i < ln; i++ ) {
     var line = lines[i];
@@ -72,7 +72,8 @@ JSDocParser.prototype.parse_file = function( path ){
       };
 
     } else if ( inBlock && this.re.endBlock.test( line ) ) {
-        block.comment[ block.comment.length - 1 ] = block.comment[ block.comment.length - 1 ] + ' @';
+        //block.comment[ block.comment.length - 1 ] = block.comment[ block.comment.length - 1 ] + ' @';
+      block.comment.push( ' @' );
         inBlock = false;
         last_line = true;
     }
@@ -80,7 +81,7 @@ JSDocParser.prototype.parse_file = function( path ){
     if ( inBlock && this.re.blockComment.test( line ) ){
       text = this.re.blockComment.exec( line )[1].replace( /@link/g, '&link');
       //block.comment += ( text == '' ) ? ' ' : text;
-      if( text != '') block.comment.push( text.replace(/@/g,' @') );
+      block.comment.push( text.replace(/@/g,' @') );
     } else if( !last_line )
         //if( block ) block.source += line;
         if( block ) block.source.push( line );
@@ -100,7 +101,7 @@ JSDocParser.prototype.collect_classes = function( file_path ){
     }, this );
   } else {
     if( path.extname( file_path ) == '.js' ) {
-      this.log( 'parsing file %s'.format( file_path ) );
+      //this.log( 'parsing file %s'.format( file_path ) );
       this.parse_file( file_path );
     }
   }
@@ -115,5 +116,5 @@ JSDocParser.prototype.add_class = function( class ){
 }
 
 JSDocParser.prototype.get_classes_names = function(){
-  return Object.keys( this._classes )
+  return Object.keys( this._classes ).sort();
 }

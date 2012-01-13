@@ -14,7 +14,7 @@ Class.prototype._init = function( params ){
       deprecated: /@deprecated/i,
       event: /@event/i,
       method: /@(method|function)/i,
-      name: /@name\s+(.+)@/i,
+      name: /@name\s+(.+?)@/i,
       memberOf: /@this\s+(.*)/i,
       param: /@param\s+{(.*?)}\s+(.+?)\s+(.*?)@/ig,
       property: /@property\s+{(\w+)}\s+(.+?)\s+(.*?)@/ig,
@@ -24,20 +24,29 @@ Class.prototype._init = function( params ){
       method_throws: /@throws\s+{(\w*)}\s+(.*?)@/i,
       extends: /@(extends|augments)\s+(.*?)\s+/i,
       type: /@(type)\s+{(\w+)}/i,
-      example : /@example\s+(.*?)$/i
+      example : /@example\s+(.*?)$/i,
+      description : /@description/i
       };
   
   this.path = params.path || 'file unknown';
   this.className = '';
   this.methods   = [];
   this.properties = [];
+  this.events    = [];
   this.description = '';
 
   if( params.blocks && params.blocks.length ) this.parse_blocks( params.blocks );
+  this.check_prop_lengths();
 
   return this;
-} 
-    
+}
+
+Class.prototype.check_prop_lengths = function( str, block ){
+  if( this.methods.length == 0 ) this.methods = null;
+  if( this.properties.length == 0 ) this.properties = null;
+  if( this.events.length == 0 ) this.events = null;
+}
+
 Class.prototype.check = function( str, block ){
   if( typeof block == 'string' ) return this.re[ str ].test( block );
   return this.re[ str ].test( block.comment ) || this.re[ str ].test( block.source )
@@ -60,12 +69,21 @@ Class.prototype.parse_blocks = function( blocks ){
   //if( this.check( 'author', block.comment ) || this.check ( 'version', block.comment ) ) return this.parse_head();
     if( this.is_method( blocks[ i ] ) )
       this.parse_method( blocks[ i ] );
-    else 
-      this.parse_property( blocks[ i ] );
+    else if( this.re.event.test( blocks[ i ].comment.join('') ) )
+          this.parse_event( blocks[ i ] );
+        else
+          this.parse_property( blocks[ i ] );
   }
 }
+// --------------------- EVENTS ------------------------------
 
-Class.prototype.parse_head = function(){
+Class.prototype.parse_event = function( block ){
+  var comment = block.comment.join('');
+  this.events.push( new Property({
+    name : this.get_name( comment ),
+    description : this.get_description( block.comment, 'description' ),
+    example     : this.get_example( block.comment, 'example' )
+  }))
 }
 
 // --------------------- PROPERTIES ------------------------------
@@ -81,7 +99,7 @@ Class.prototype.parse_property = function( block ){
     privacy     : this.get_privacy( comment ),
     description : this.get_description( block.comment ),
     properties  : this.get_params( 'property', comment ),
-    example     : this.get_description( block.comment, 'example' ),
+    example     : this.get_example( block.comment, 'example' ),
     type        : this.get_single_field( 'type', comment )
   }))
 }
@@ -98,7 +116,7 @@ Class.prototype.parse_method = function( block ){
   var comment = block.comment.join('');
 
   var name = this.get_name( comment );
-  if( !name ) name = this.extract_method_name( block.source.join('') );
+  if( !name ) name = this.extract_method_name( block.source[0] );
   var description = this.get_description( block.comment );
   if( this.check( 'constructor', comment ) ){
     this.className = name;
@@ -115,7 +133,7 @@ Class.prototype.parse_method = function( block ){
     privacy       : this.get_privacy( comment ),
     static        : this.check( 'static', comment ),
     description   : description,
-    example       : this.get_description( block.comment, 'example' ),
+    example       : this.get_example( block.comment, 'example' ),
     properties    : this.get_params( 'property', comment )
   }))
 }
@@ -162,6 +180,32 @@ Class.prototype.get_type_descr = function( tag, comment ){
 Class.prototype.get_description = function( comment, tag ){
   var index = 0,
       ln = comment.length,
+      result = [],
+      line = '';
+  if( tag ){
+    index = this._get_line_index_by_tag( comment, tag );
+    if( index == ln ) return null;
+    line = comment[ index ].replace( '@' + tag, '');
+    index++;
+  }
+  while( index < ln ){
+    if( /@/.test( comment[ index ] ) || index == ln-1 ){
+      result.push( line );
+      return result;
+    }
+    if( comment[ index ] == '' ){
+      result.push( line + ' ' );
+      line = '';
+    } else line += comment[ index ];
+    index++;
+  }
+  result.push( line );
+  return result;
+}
+
+Class.prototype.get_example = function( comment, tag ){
+  var index = 0,
+      ln = comment.length,
       result = [];
   if( tag ){
     index = this._get_line_index_by_tag( comment, tag );
@@ -174,6 +218,7 @@ Class.prototype.get_description = function( comment, tag ){
     result.push( comment[ index ] );
     index++;
   }
+  return result;
 }
 
 Class.prototype.get_single_field = function( tag, comment ){
