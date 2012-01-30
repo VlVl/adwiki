@@ -36,6 +36,7 @@ JSDocParser.prototype._init = function ( params ) {
 
   this._classes = {};
   this.dir = path.normalize( params.dir ) || path.normalize( '..' ); 
+  this.add_rules();
   this.collect_classes( this.dir );
 }
 
@@ -79,7 +80,7 @@ JSDocParser.prototype.parse_file = function( path ){
     }
 
     if ( inBlock && this.re.blockComment.test( line ) ){
-      text = this.re.blockComment.exec( line )[1].replace( /@link/g, '&link');
+      text = this.create_links( this.re.blockComment.exec( line )[1] );
       //block.comment += ( text == '' ) ? ' ' : text;
       block.comment.push( text.replace(/@/g,' @') );
     } else if( !last_line )
@@ -117,4 +118,22 @@ JSDocParser.prototype.add_class = function( class ){
 
 JSDocParser.prototype.get_classes_names = function(){
   return Object.keys( this._classes ).sort();
+}
+
+JSDocParser.prototype.create_links = function( text ){
+  var link, class;
+  while( link = /{@link\s+(.+?)}/ig.exec( text )){
+    class = link[ 1 ].split( '.' );
+    var str = '<a href="' + this.app.router.create_url( 'site.docs', { class : class[ 0 ] });
+    str += class[ 1 ] ? ( '#' + class[ 1 ] ) : '';
+    str += '">' + link[ 1 ] + '</a>' ;
+    text = text.replace( /{@link\s+(.+?)}/i, str );
+  }
+  return text;
+}
+
+JSDocParser.prototype.add_rules = function(){
+  var router = this.app.router;
+  router.add_rule( 'class', 'site.docs' );
+  router.add_rule( 'class/<class:\\w+>', 'site.docs' );
 }

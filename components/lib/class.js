@@ -1,5 +1,4 @@
-var Method = require( './method.js');
-var Property = require( './property.js');
+var ClassElement = require( './class_element.js');
 
 module.exports = Class = function( params ){
   return this._init( params );
@@ -78,8 +77,8 @@ Class.prototype.parse_blocks = function( blocks ){
 // --------------------- EVENTS ------------------------------
 
 Class.prototype.parse_event = function( block ){
-  var comment = block.comment.join('');
-  this.events.push( new Property({
+  var comment = block.comment.join(' ');
+  this.events.push( new ClassElement({
     name : this.get_name( comment ),
     description : this.get_description( block.comment, 'description' ),
     example     : this.get_example( block.comment, 'example' )
@@ -89,11 +88,11 @@ Class.prototype.parse_event = function( block ){
 // --------------------- PROPERTIES ------------------------------
 
 Class.prototype.parse_property = function( block ){
-  var comment = block.comment.join('');
+  var comment = block.comment.join(' ');
   var name = this.get_name( comment );
   if( !name ) name = this.extract_property_name( block.source.join('') );
 //  this.properties[ name ] =  new Property({
-  this.properties.push( new Property({
+  this.properties.push( new ClassElement({
     name        : name,
     static      : this.check( 'static', comment ),
     privacy     : this.get_privacy( comment ),
@@ -113,19 +112,19 @@ Class.prototype.extract_property_name = function( source ){
 // --------------------- METHODS ------------------------------
 
 Class.prototype.parse_method = function( block ){
-  var comment = block.comment.join('');
+  var comment = block.comment.join(' ');
 
   var name = this.get_name( comment );
   if( !name ) name = this.extract_method_name( block.source[0] );
   var description = this.get_description( block.comment );
   if( this.check( 'constructor', comment ) ){
     this.className = name;
-    this.extends   = this.get_single_field( 'extends', block.comment );
+    this.extends   = this.get_single_field( 'extends', comment );
     this.description = description;
     description = 'Конструктор класса';
   }
   //this.methods[ name ] = new Method({
-  this.methods.push( new Method({
+  this.methods.push( new ClassElement({
     name          : name,
     params        : this.get_params( 'param', comment ),
     returns       : this.get_type_descr( 'returns', comment ),
@@ -193,10 +192,10 @@ Class.prototype.get_description = function( comment, tag ){
       result.push( line );
       return result;
     }
-    if( comment[ index ] == '' ){
-      result.push( line + ' ' );
+    if( comment[ index ] == '' && index > 0 ){
+      result.push( line );
       line = '';
-    } else line += comment[ index ];
+    } else line += ( comment[ index ] + ' ' );
     index++;
   }
   result.push( line );
