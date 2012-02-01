@@ -19,6 +19,11 @@ ClassElement.prototype._init = function( params ){
   this.returns       = params.returns;
   this.method_throws = params.method_throws;
 
+  this._.trim_name = '';
+  this._.trim_name.get = function(){
+    return this.name.trim();
+  }
+
   this._.short_description = '';
   this._.short_description.get = function(){
     return Array.isArray( this.description ) ? this.description[ 0 ] : this.description;
