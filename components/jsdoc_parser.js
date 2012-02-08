@@ -112,8 +112,8 @@ JSDocParser.prototype.get_class_by_name = function( className ){
   return this._classes[ className ];
 }
 
-JSDocParser.prototype.add_class = function( class ){
-  this._classes[ class.className ] = class;
+JSDocParser.prototype.add_class = function( clazz ){
+  this._classes[ clazz.className ] = clazz;
 }
 
 JSDocParser.prototype.get_classes_names = function(){
@@ -121,11 +121,11 @@ JSDocParser.prototype.get_classes_names = function(){
 }
 
 JSDocParser.prototype.create_links = function( text ){
-  var link, class;
+  var link, clazz;
   while( link = /{@link\s+(.+?)}/ig.exec( text )){
-    class = link[ 1 ].split( '.' );
-    var str = '<a href="' + this.app.router.create_url( 'site.docs', { class : class[ 0 ] });
-    str += class[ 1 ] ? ( '#' + class[ 1 ] ) : '';
+    clazz = link[ 1 ].split( '.' );
+    var str = '<a href="' + this.app.router.create_url( 'site.docs', { class : clazz[ 0 ] });
+    str += clazz[ 1 ] ? ( '#' + clazz[ 1 ] ) : '';
     str += '">' + link[ 1 ] + '</a>' ;
     text = text.replace( /{@link\s+(.+?)}/i, str );
   }
