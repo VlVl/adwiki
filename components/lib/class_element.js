@@ -18,6 +18,9 @@ ClassElement.prototype._init = function( params ){
   this.params        = params.params;
   this.returns       = params.returns;
   this.method_throws = params.method_throws;
+  this.extends       = params.extends;
+  this.see           = params.see;
+
 
   this._.trim_name = '';
   this._.trim_name.get = function(){

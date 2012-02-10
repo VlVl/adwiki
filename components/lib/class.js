@@ -1,10 +1,14 @@
+var AutodafePart = global.autodafe.AutodafePart;
 var ClassElement = require( './class_element.js');
 
-module.exports = Class = function( params ){
+module.exports = Class.inherits( AutodafePart );
+
+function Class( params ){
   return this._init( params );
 }
 
 Class.prototype._init = function( params ){
+  Class.parent._init.call( this, params );
   this.re = {
       // jsdoc tags
       author: /@author\s+(.*)/i,
@@ -24,18 +28,31 @@ Class.prototype._init = function( params ){
       extends: /@(extends|augments)\s+(.*?)\s+/i,
       type: /@(type)\s+{(\w+)}/i,
       example : /@example\s+(.*?)$/i,
-      description : /@description/i
+      description : /@description/i,
+      see : /@see\s+(.+?)@/ig
       };
   
-  this.path = params.path || 'file unknown';
+  this.path = params.path || 'Файл не определен';
   this.className = '';
   this.methods   = [];
   this.properties = [];
   this.events    = [];
   this.description = '';
 
+  this._.short_description = '';
+  this._.short_description.get = function(){
+    return Array.isArray( this.description ) ? this.description[ 0 ] : this.description;
+  };
+
+  this._.short_path = '';
+  this._.short_path.get = function(){
+    var tmp = this.path.split( '/autodafe/' );
+    return tmp[ 1 ] ? 'autodafe/' + tmp[ 1 ] : this.path;
+  }
+
   if( params.blocks && params.blocks.length ) this.parse_blocks( params.blocks );
   this.check_prop_lengths();
+  this.constructor = this.get_element_by_name( this.className, 'methods' )[0];
 
   return this;
 }
@@ -57,12 +74,13 @@ Class.prototype.is_method = function( block ){
     if( block.source[ i ] != '' ) return /function/.test( block.source[ i ] )
 }
     
-//Class.prototype.replace_links = function( block ){
-//  return { comment : block.comment.replace( /@link/g, '&link'),
-//           source  : block.source };
-//}
-    
-    
+Class.prototype.get_element_by_name = function( name, type ){
+  for (var i = 0, ln_i = this[ type ].length; i < ln_i; i++) {
+    if( this[ type ][ i ].name == name ) return this[ type ].splice( i, 1 );
+  }
+  return null;
+}
+
 Class.prototype.parse_blocks = function( blocks ){
   for (var i = 0, ln_i = blocks.length; i < ln_i; i++) {
   //if( this.check( 'author', block.comment ) || this.check ( 'version', block.comment ) ) return this.parse_head();
@@ -119,9 +137,8 @@ Class.prototype.parse_method = function( block ){
   var description = this.get_description( block.comment );
   if( this.check( 'constructor', comment ) ){
     this.className = name;
-    this.extends   = this.get_single_field( 'extends', comment );
     this.description = description;
-    description = 'Конструктор класса';
+    var ext = this.get_single_field( 'extends', comment )
   }
   //this.methods[ name ] = new Method({
   this.methods.push( new ClassElement({
@@ -133,7 +150,9 @@ Class.prototype.parse_method = function( block ){
     static        : this.check( 'static', comment ),
     description   : description,
     example       : this.get_example( block.comment, 'example' ),
-    properties    : this.get_params( 'property', comment )
+    properties    : this.get_params( 'property', comment ),
+    extends       : ext,
+    see           : this.get_params( 'see', comment )
   }))
 }
 
@@ -141,14 +160,14 @@ Class.prototype.get_params = function( tag, comment ){
   var result,arr = [];
   while( (result = this.re[ tag ].exec( comment ) ) != null ){
     arr.push({
-      type : result[ 1 ],
-      name : result[ 2 ],
+      type : result[ 1 ] ? result[ 1 ].trim() : null,
+      name : result[ 2 ] ? result[ 2 ].trim() : null,
       //description : this.get_description( result[ 3 ] )
       description : result[ 3 ]
     } )
   this.re[tag].lastIndex = result[ 0 ].length + result.index - 1;
 }
-  return arr;
+  return arr.length ? arr : null;
 }
 
 Class.prototype.get_name = function( comment ){
