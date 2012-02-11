@@ -28,7 +28,7 @@ JSDocParser.prototype._init = function ( params ) {
       inline: /\/\*+(.*)\*\//,
       startBlock: /\/\*+/,
       endBlock: /\*\//,
-      blockComment: /\s*\*+\s*(.*)$/,
+      blockComment: /\s*\*+(\s*.*)$/,
 
       // jsdoc tags
       constructor: /@constructor/i
@@ -83,7 +83,7 @@ JSDocParser.prototype.parse_file = function( path ){
     if ( inBlock && this.re.blockComment.test( line ) ){
       text = this.create_links( this.re.blockComment.exec( line )[1] );
       //block.comment += ( text == '' ) ? ' ' : text;
-      block.comment.push( text.replace(/@/g,' @') );
+      block.comment.push( text.replace(/@/g,' @') + ' ');
     } else if( !last_line )
         //if( block ) block.source += line;
         if( block ) block.source.push( line );
@@ -143,5 +143,5 @@ JSDocParser.prototype.create_links = function( text ){
 JSDocParser.prototype.add_rules = function(){
   var router = this.app.router;
   router.add_rule( 'class', 'site.docs' );
-  router.add_rule( 'class/<class:\\w+>', 'site.docs' );
+  router.add_rule( 'class/<class:\[A-Za-z:#]+>', 'site.docs' );
 }

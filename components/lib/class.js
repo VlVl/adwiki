@@ -21,9 +21,10 @@ Class.prototype._init = function( params ){
       memberOf: /@this\s+(.*)/i,
       param: /@param\s+{(.*?)}\s+(.+?)\s+(.*?)@/ig,
       property: /@property\s+{(\w+)}\s+(.+?)\s+(.*?)@/ig,
-      returns: /@returns\s+{(\w+)}\s+(.*?)@/i,
+      returns: /@returns\s+{(.+?)}\s+(.*?)@/i,
       privacy: /@(public|private|protected)/i,
       static: /@static/i,
+      field: /@field/i,
       method_throws: /@throws\s+{(\w*)}\s+(.*?)@/i,
       extends: /@(extends|augments)\s+(.*?)\s+/i,
       type: /@(type)\s+{(\w+)}/i,
@@ -69,6 +70,7 @@ Class.prototype.check = function( str, block ){
 }
 
 Class.prototype.is_method = function( block ){
+  if( this.check( 'field', block.comment.join('') ) ) return false;
   if( this.check( 'method', block.comment.join('') ) ) return true;
   for (var i = 0, ln_i = block.source.length; i < ln_i; i++)
     if( block.source[ i ] != '' ) return /function/.test( block.source[ i ] )
@@ -99,7 +101,8 @@ Class.prototype.parse_event = function( block ){
   this.events.push( new ClassElement({
     name : this.get_name( comment ),
     description : this.get_description( block.comment, 'description' ),
-    example     : this.get_example( block.comment, 'example' )
+    example     : this.get_example( block.comment, 'example' ),
+    see           : this.get_params( 'see', comment )
   }))
 }
 
@@ -117,7 +120,8 @@ Class.prototype.parse_property = function( block ){
     description : this.get_description( block.comment ),
     properties  : this.get_params( 'property', comment ),
     example     : this.get_example( block.comment, 'example' ),
-    type        : this.get_single_field( 'type', comment )
+    type        : this.get_single_field( 'type', comment ),
+    see           : this.get_params( 'see', comment )
   }))
 }
 
@@ -211,7 +215,7 @@ Class.prototype.get_description = function( comment, tag ){
       result.push( line );
       return result;
     }
-    if( comment[ index ] == '' && index > 0 ){
+    if( comment[ index ].trim() == '' && index > 0 ){
       result.push( line );
       line = '';
     } else line += ( comment[ index ] + ' ' );
