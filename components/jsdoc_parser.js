@@ -113,13 +113,17 @@ JSDocParser.prototype.get_class_by_name = function( className ){
   return this._classes[ className ];
 }
 
-JSDocParser.prototype.add_class = function( class ){
-  this._classes[ class.className ] = class;
+JSDocParser.prototype.add_class = function( clazz ){
+  this._classes[ clazz.className ] = clazz;
 }
 
 JSDocParser.prototype.get_classes_names = function(){
   return Object.keys( this._classes ).sort();
 }
+
+JSDocParser.prototype.get_classes = function () {
+  return this.get_classes_names().map( this.get_class_by_name.bind( this ) );
+};
 
 JSDocParser.prototype.create_links = function( text ){
   var link, clazz;
