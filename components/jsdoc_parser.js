@@ -64,6 +64,7 @@ JSDocParser.prototype.parse_file = function( path ){
           this.add_class( new Class( { path : path, blocks : blocks } ) );
           blocks = [];
         }
+        if( i == ln-1 ) block.source.push( line );
         blocks.push( block );
       }
       inBlock = true;
