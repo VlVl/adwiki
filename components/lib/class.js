@@ -19,7 +19,8 @@ Class.prototype._init = function( params ){
       method: /@(method|function)/i,
       name: /@name\s+(.+?)@/i,
       memberOf: /@this\s+(.*)/i,
-      param: /@param\s+{(.*?)}\s+(.+?)\s+(.*?)@/ig,
+//      param: /@param\s+([{a-zA-Z|_.}]*?)\s+([a-zA-Z_]+?)\s+(.*?)@/ig,
+      param: /@param\s+([{a-zA-Z|_.}]*?)\s+(.*?)@/ig,
       property: /@property\s+{(\w+)}\s+(.+?)\s+(.*?)@/ig,
       returns: /@returns\s+{(.+?)}\s+(.*?)@/i,
       privacy: /@(public|private|protected)/i,
@@ -117,7 +118,8 @@ Class.prototype.parse_event = function( block ){
     name        : this.get_name( comment ),
     description : this.get_description( block.comment, 'description' ),
     example     : this.get_example( block.comment, 'example' ),
-    see         : this.get_params( 'see', comment )
+    see         : this.get_several_values( 'see', comment ),
+    params      : this.get_params( comment )
   }))
 }
 
@@ -133,10 +135,10 @@ Class.prototype.parse_property = function( block ){
     static      : this.check( 'static', comment ),
     privacy     : this.get_privacy( comment ),
     description : this.get_description( block.comment ),
-    properties  : this.get_params( 'property', comment ),
+    properties  : this.get_several_values( 'property', comment ),
     example     : this.get_example( block.comment, 'example' ),
     type        : this.get_single_field( 'type', comment ),
-    see         : this.get_params( 'see', comment )
+    see         : this.get_several_values( 'see', comment )
   }))
 }
 
@@ -162,29 +164,59 @@ Class.prototype.parse_method = function( block ){
   //this.methods[ name ] = new Method({
   this.methods.push( new ClassElement({
     name          : name,
-    params        : this.get_params( 'param', comment ),
+    params        : this.get_params( comment ),
     returns       : this.get_type_descr( 'returns', comment ),
     method_throws : this.get_type_descr( 'method_throws', comment ),
     privacy       : this.get_privacy( comment ),
     static        : this.check( 'static', comment ),
     description   : description,
     example       : this.get_example( block.comment, 'example' ),
-    properties    : this.get_params( 'property', comment ),
+    properties    : this.get_several_values( 'property', comment ),
     extends       : ext,
-    see           : this.get_params( 'see', comment )
+    see           : this.get_several_values( 'see', comment )
   }))
 }
 
-Class.prototype.get_params = function( tag, comment ){
+Class.prototype.get_params = function( comment ){
+  var result,name,description,tmp,arr = [];
+  while( (result = this.re.param.exec( comment ) ) != null ){
+    var tmp_text = result[ 1 ] + result[ 2 ];
+    if( /{/.test( result[ 1 ] ) ){
+      var type = result[ 1 ].replace( '{','' ).replace( '}','' );
+      tmp_text = result[ 2 ];
+    } else type = '';
+    if( name = /\[(.*?)\]/.exec( tmp_text ) ){
+      description = tmp_text.replace( /\[.*?\]/, '' );
+      tmp = name[ 1 ].split( '=' );
+      name = tmp.shift();
+      var default_value = tmp.length ? tmp.join('=') : '--';
+    } else {
+        tmp = tmp_text.split( ' ' );
+        name = tmp.shift()  ;
+        description = tmp.join( ' ' );
+        default_value = null;
+    }
+    arr.push({
+      type : type,
+      name : name,
+      description   : description,
+      default_value : default_value
+    } );
+  this.re.param.lastIndex = result[ 0 ].length + result.index - 1;
+}
+  return arr.length ? arr : null;
+}
+
+Class.prototype.get_several_values = function( tag, comment ){
   var result,arr = [];
   while( (result = this.re[ tag ].exec( comment ) ) != null ){
     arr.push({
       type : result[ 1 ] ? result[ 1 ].trim() : null,
       name : result[ 2 ] ? result[ 2 ].trim() : null,
       description : result[ 3 ]
-    } )
-  this.re[tag].lastIndex = result[ 0 ].length + result.index - 1;
-}
+    } );
+    this.re[ tag ].lastIndex = result[ 0 ].length + result.index - 1;
+  }
   return arr.length ? arr : null;
 }
 
