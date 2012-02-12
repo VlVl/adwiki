@@ -52,16 +52,15 @@ Class.prototype._init = function( params ){
   }
 
   if( params.blocks && params.blocks.length ) this.parse_blocks( params.blocks );
-  this.check_prop_lengths();
-  this.constructor = this.get_element_by_name( this.className, 'methods' )[0];
+
+  this._after_parse_actions();
 
   return this;
 }
 
-Class.prototype.check_prop_lengths = function( str, block ){
-  if( this.methods.length == 0 ) this.methods = null;
-  if( this.properties.length == 0 ) this.properties = null;
-  if( this.events.length == 0 ) this.events = null;
+Class.prototype._after_parse_actions = function(){
+  this.sort_arrays();
+  this.constructor = this.get_element_by_name( this.className, 'methods' )[0];
 }
 
 Class.prototype.check = function( str, block ){
@@ -76,12 +75,28 @@ Class.prototype.is_method = function( block ){
     if( block.source[ i ] != '' ) return /function/.test( block.source[ i ] )
 }
     
-Class.prototype.get_element_by_name = function( name, type ){
+Class.prototype.get_element_by_name = function( name, type, remove ){
+  remove = remove || true;
   for (var i = 0, ln_i = this[ type ].length; i < ln_i; i++) {
-    if( this[ type ][ i ].name == name ) return this[ type ].splice( i, 1 );
+    if( this[ type ][ i ].name == name ) return remove ? this[ type ].splice( i, 1 ) : this[ type ][ i ];
   }
   return null;
 }
+
+Class.prototype.sort_arrays = function(){
+  [ this.events, this.properties, this.methods ]
+    .for_each( function( array ){
+      if( array.length )
+      array.sort( function( a, b ){
+        if( a.name.toLowerCase() < b.name.toLowerCase() )  return -1;
+        if( a.name.toLowerCase() == b.name.toLowerCase() ) return 0;
+        if( a.name.toLowerCase() > b.name.toLowerCase() )  return 1;
+      } )
+      else array = null;
+    })
+}
+
+
 
 Class.prototype.parse_blocks = function( blocks ){
   for (var i = 0, ln_i = blocks.length; i < ln_i; i++) {
@@ -99,10 +114,10 @@ Class.prototype.parse_blocks = function( blocks ){
 Class.prototype.parse_event = function( block ){
   var comment = block.comment.join(' ');
   this.events.push( new ClassElement({
-    name : this.get_name( comment ),
+    name        : this.get_name( comment ),
     description : this.get_description( block.comment, 'description' ),
     example     : this.get_example( block.comment, 'example' ),
-    see           : this.get_params( 'see', comment )
+    see         : this.get_params( 'see', comment )
   }))
 }
 
@@ -121,7 +136,7 @@ Class.prototype.parse_property = function( block ){
     properties  : this.get_params( 'property', comment ),
     example     : this.get_example( block.comment, 'example' ),
     type        : this.get_single_field( 'type', comment ),
-    see           : this.get_params( 'see', comment )
+    see         : this.get_params( 'see', comment )
   }))
 }
 
@@ -166,7 +181,6 @@ Class.prototype.get_params = function( tag, comment ){
     arr.push({
       type : result[ 1 ] ? result[ 1 ].trim() : null,
       name : result[ 2 ] ? result[ 2 ].trim() : null,
-      //description : this.get_description( result[ 3 ] )
       description : result[ 3 ]
     } )
   this.re[tag].lastIndex = result[ 0 ].length + result.index - 1;
@@ -176,7 +190,6 @@ Class.prototype.get_params = function( tag, comment ){
 
 Class.prototype.get_name = function( comment ){
   var result = this.re.name.exec( comment );
-//  return  result ? this.get_description( result[ 1 ] ) : null;
   return  result ? result[ 1 ] : null;
 }
 
@@ -194,7 +207,6 @@ Class.prototype.get_type_descr = function( tag, comment ){
   var result = this.re[ tag ].exec( comment );
   return  result ? {
     type : result[ 1 ],
-    //description : this.get_description( result[ 2 ] )
     description : result[ 2 ]
   } : '';
 }
@@ -245,7 +257,6 @@ Class.prototype.get_example = function( comment, tag ){
 
 Class.prototype.get_single_field = function( tag, comment ){
   var result = this.re[ tag ].exec( comment );
-  //return result ? this.get_description( result[ 2 ] ) : null;
   return result ? result[ 2 ] : null;
 }
 

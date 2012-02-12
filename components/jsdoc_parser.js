@@ -38,7 +38,15 @@ JSDocParser.prototype._init = function ( params ) {
   this.dir = path.normalize( params.dir ) || path.normalize( '..' ); 
   this.add_rules();
   this.collect_classes( this.dir );
+  this.create_types_links();
 }
+
+JSDocParser.prototype.reload = function(){
+  this._classes = {};
+  this.collect_classes( this.dir );
+  this.create_types_links();
+  return this.get_classes_names()
+};
 
 JSDocParser.prototype.parse_file = function( path ){
   var data = fs.readFileSync( path, 'utf8' ) + '';
@@ -74,7 +82,6 @@ JSDocParser.prototype.parse_file = function( path ){
       };
 
     } else if ( inBlock && this.re.endBlock.test( line ) ) {
-        //block.comment[ block.comment.length - 1 ] = block.comment[ block.comment.length - 1 ] + ' @';
       block.comment.push( ' @' );
         inBlock = false;
         last_line = true;
@@ -85,7 +92,6 @@ JSDocParser.prototype.parse_file = function( path ){
       //block.comment += ( text == '' ) ? ' ' : text;
       block.comment.push( text.replace(/@/g,' @') + ' ');
     } else if( !last_line )
-        //if( block ) block.source += line;
         if( block ) block.source.push( line );
 
   if( i == ln-1 )
@@ -103,7 +109,6 @@ JSDocParser.prototype.collect_classes = function( file_path ){
     }, this );
   } else {
     if( path.extname( file_path ) == '.js' ) {
-      //this.log( 'parsing file %s'.format( file_path ) );
       this.parse_file( file_path );
     }
   }
@@ -128,24 +133,47 @@ JSDocParser.prototype.get_classes = function () {
 JSDocParser.prototype.create_links = function( text ){
   var link, clazz;
   while( link = /{@link\s+(.+?)}/ig.exec( text )){
-    clazz = link[ 1 ].split( '.' );
-    var str = '<a href="' + this.app.router.create_url( 'site.docs', { class : clazz[ 0 ] });
-    str += clazz[ 1 ] ? ( '#' + clazz[ 1 ] ) : '';
-    str += '">' + link[ 1 ] + '</a>' ;
-    text = text.replace( /{@link\s+(.+?)}/i, str );
+    text = text.replace( /{@link\s+(.+?)}/i, this.link( link[ 1 ] ) );
   }
   if( link = /@see\s+(.+?)$/ig.exec( text ) ){
-    clazz = link[ 1 ].split( '.' );
-    str = '<a href="' + this.app.router.create_url( 'site.docs', { class : clazz[ 0 ] });
-    str += clazz[ 1 ] ? ( '#' + clazz[ 1 ] ) : '';
-    str += '">' + link[ 1 ] + '</a>' ;
-    text = text.replace( link[ 1 ], str );
+    text = text.replace( link[ 1 ], this.link( link[ 1 ] ) );
   }
   return text;
+}
+
+JSDocParser.prototype.create_types_links = function(){
+  var self = this,
+      names = this.get_classes_names();
+  Object.values( this._classes ).for_each( function( _class ){
+    _class.properties.for_each( function( el ){
+      if( names.indexOf( el.type ) != -1 )
+        el.type = self.link( el.type );
+    } );
+    _class.methods.for_each( function( el ){
+      if( names.indexOf( el.method_throws.type ) != -1 )
+        el.method_throws.type = self.link( el.method_throws.type );
+      if( names.indexOf( el.returns.type ) != -1 )
+        el.returns.type = self.link( el.returns.type );
+      if( el.params )
+        el.params.for_each( function( param ){
+          if( names.indexOf( param.type ) != -1 )
+            param.type = self.link( param.type );
+      } )
+    } )
+  } )
 }
 
 JSDocParser.prototype.add_rules = function(){
   var router = this.app.router;
   router.add_rule( 'class', 'site.docs' );
   router.add_rule( 'class/<class:\[A-Za-z:#]+>', 'site.docs' );
+  router.add_rule( 'reload', 'site.reload' );
+}
+
+JSDocParser.prototype.link = function( str ){
+  var tmp = str.split( '.' );
+  var link = '<a href="' + this.app.router.create_url( 'site.docs', { class : tmp[ 0 ] });
+  link += tmp[ 1 ] ? ( '#' + tmp[ 1 ] ) : '';
+  link += '">' + str + '</a>' ;
+  return link;
 }
