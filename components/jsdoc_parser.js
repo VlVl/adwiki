@@ -56,7 +56,7 @@ JSDocParser.prototype.parse_file = function( path ){
   last_line = false,
   text,
 
-  lines = data.replace(/<pre>/g, '<pre class="code">' ).split("\n");
+  lines = data/*.replace(/<pre>/g, '<pre class="code">' )*/.split("\n");
 
   for ( var i = 0, ln = lines.length; i < ln; i++ ) {
     var line = lines[i];
