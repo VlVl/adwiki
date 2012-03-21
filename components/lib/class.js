@@ -180,7 +180,7 @@ Class.prototype.parse_method = function( block ){
 Class.prototype.get_params = function( comment ){
   var result,name,description,tmp,arr = [];
   while( (result = this.re.param.exec( comment ) ) != null ){
-    var tmp_text = result[ 1 ] + result[ 2 ];
+    var tmp_text = result[ 1 ] + ' ' + result[ 2 ];
     if( /{/.test( result[ 1 ] ) ){
       var type = result[ 1 ].replace( '{','' ).replace( '}','' );
       tmp_text = result[ 2 ];
@@ -285,6 +285,14 @@ Class.prototype.get_example = function( comment, tag ){
     index++;
   }
   return result;
+}
+
+Class.prototype.extract_pre_block = function( text ){
+//  var result;
+//  var blocks = [];
+//  while( (result = /<pre><.+?>(.+)<\/code/.exec( text ) ) != null ){
+//    blocks.
+//  }
 }
 
 Class.prototype.get_single_field = function( tag, comment ){

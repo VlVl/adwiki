@@ -91,7 +91,7 @@ JSDocParser.prototype.parse_file = function( path ){
       text = this.create_links( this.re.blockComment.exec( line )[1] );
       //block.comment += ( text == '' ) ? ' ' : text;
       block.comment.push( text.replace(/@/g,' @') + ' ');
-    } else if( !last_line )
+    } else if( !last_line && line != '' )
         if( block ) block.source.push( line );
 
   if( i == ln-1 )
