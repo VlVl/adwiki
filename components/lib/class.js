@@ -86,7 +86,7 @@ Class.prototype.get_element_by_name = function( name, type, remove ){
 
 Class.prototype.sort_arrays = function(){
   [ this.events, this.properties, this.methods ]
-    .for_each( function( array ){
+    .forEach( function( array ){
       if( array.length )
       array.sort( function( a, b ){
         if( a.name.toLowerCase() < b.name.toLowerCase() )  return -1;

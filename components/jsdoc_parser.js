@@ -144,25 +144,25 @@ JSDocParser.prototype.create_links = function( text ){
 JSDocParser.prototype.create_types_links = function(){
   var self = this,
       names = this.get_classes_names();
-  Object.values( this._classes ).for_each( function( _class ){
-    _class.properties.for_each( function( el ){
+  Object.values( this._classes ).forEach( function( _class ){
+    _class.properties.forEach( function( el ){
       if( names.indexOf( el.type ) != -1 )
         el.type = self.link( el.type );
     } );
-    _class.events.for_each( function( el ){
+    _class.events.forEach( function( el ){
       if( el.params )
-        el.params.for_each( function( param ){
+        el.params.forEach( function( param ){
           if( names.indexOf( param.type ) != -1 )
             param.type = self.link( param.type );
       } )
     } )
-    _class.methods.for_each( function( el ){
+    _class.methods.forEach( function( el ){
       if( names.indexOf( el.method_throws.type ) != -1 )
         el.method_throws.type = self.link( el.method_throws.type );
       if( names.indexOf( el.returns.type ) != -1 )
         el.returns.type = self.link( el.returns.type );
       if( el.params )
-        el.params.for_each( function( param ){
+        el.params.forEach( function( param ){
           if( names.indexOf( param.type ) != -1 )
             param.type = self.link( param.type );
       } )
