@@ -18,17 +18,17 @@ Site.prototype._init = function( params ){
 }
 
 Site.prototype._compile_templates = function(){
-  var templates = this.app.params.templates;
-
-  for ( var template in templates ) {
-    var file     = fs.readFileSync( path.join( this.app.base_dir, template ), 'utf8' );
-    var compiled = this.dust.compile( file, path.basename( template, '.html' ) );
-    var file_path = path.join( this.app.base_dir, templates[ template ], path.basename( template, '.html' ) + '.js' );
-    if ( path.existsSync( file_path ) ) fs.unlinkSync( file_path );
-    var fd = fs.openSync( file_path, 'a', 0666 );
-    fs.writeSync( fd, compiled, null, 'utf8' );
-    fs.closeSync( fd );
-  }
+//  var templates = this.app.params.templates;
+//
+//  for ( var template in templates ) {
+//    var file     = fs.readFileSync( path.join( this.app.base_dir, template ), 'utf8' );
+//    var compiled = this.dust.compile( file, path.basename( template, '.html' ) );
+//    var file_path = path.join( this.app.base_dir, templates[ template ], path.basename( template, '.html' ) + '.js' );
+//    if ( path.existsSync( file_path ) ) fs.unlinkSync( file_path );
+//    var fd = fs.openSync( file_path, 'a', 0666 );
+//    fs.writeSync( fd, compiled, null, 'utf8' );
+//    fs.closeSync( fd );
+//  }
 
   var style = fs.readFileSync( path.join( this.app.base_dir, 'static/css/style.less' ), 'utf8' );
   var parser = new less.Parser({
@@ -65,5 +65,5 @@ Site.prototype.login = function ( response, request ) {
     request.client.set_cookie( 'autodafe_pass', pass,  365 );
   }
 
-  this.action('article', response, request);
+  this.app.router.get_controller('blog').action('article', response, request);
 };

@@ -49,7 +49,7 @@ Blog.prototype.remove = function( response, request ){
     .create_listener()
     .handle_emitter( this.models.post.remove_by_pk( request.params.post ))
     .success( function(){
-      request.redirect( self.create_url('site.article') );
+      request.redirect( self.create_url('blog.article') );
     });
 }
 
@@ -65,7 +65,7 @@ Blog.prototype.save = function( response, request ){
   else
     listener.stack <<= this.models.post.update_by_pk( id, request.params );
 
-  listener.success( request.redirect.bind( request, this.create_url('site.article', {
+  listener.success( request.redirect.bind( request, this.create_url('blog.article', {
     post : request.params.name
   })));
 }
