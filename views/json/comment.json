@@ -1,0 +1,5 @@
+{
+  "name" : "{comment.name}",
+  "text" : "{comment.text}",
+  "date_to_show" : "{comment.date_to_show}"
+}

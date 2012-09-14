@@ -1,0 +1,248 @@
+{>"main_header.html"/}
+{<head}
+  <style type="text/css">
+    section .sub{
+      padding-top: 40px;
+    }
+  </style>
+{/head}
+
+{<header}
+  <h1>{?class}{class.className}{:else}Список классов Autodafe{/class}</h1>
+{/header}
+
+{<title}{?class} - {class.className}{:else} - ADWiki{/class}{/title}
+
+{<content}
+{?class}
+
+  {>"page_hiding_list.html"/}
+
+  {<list}
+    <ul class="nav nav-list">
+      <li class="nav-header">
+        Классы
+      </li>
+      {#classes}
+        <li><a href="{#url class=className}docs{/url}">{className}</a></li>
+      {/classes}
+    </ul>
+  {/list}
+
+  {<main_content}
+    <section id="toc">
+      <span>Определен в файле <a href="{#url class=class.className}file{/url}">{class.short_path}</a></span><br/>
+      <span>{class.constructor.short_description|s}<br/><a href="#{class.className}">подробнее >></a> </span>
+
+      {?class.events}
+      <h3>События</h3>
+      <table class="table table-bordered table-condensed">
+        <tr><th>Событие</th><th>Описание</th></tr>
+        {#class.events}
+        <tr><td><a href="#event:{event_name}">{event_name}</a></td><td>{short_description|s}</td></tr>
+        {/class.events}
+      </table>
+      {/class.events}
+
+      {?class.properties}
+      <h3>Свойства</h3>
+      <table class="table table-bordered table-condensed">
+        <tr><th>Свойство</th><th>Тип</th><th>Описание</th></tr>
+        {#class.properties}
+        <tr><td><a href="#{trim_name}">{name}</a></td><td>{type|s}</td><td>{short_description|s}</td></tr>
+        {/class.properties}
+      </table>
+      {/class.properties}
+
+      {?class.methods}
+      <h3>Методы</h3>
+      <table class="table table-bordered table-condensed">
+        <tr><th>Метод</th><th>Описание</th></tr>
+        {#class.methods}
+        <tr><td><a href="#{trim_name}">{name}</a></td><td>{short_description|s}</td></tr>
+        {/class.methods}
+      </table>
+      {/class.methods}
+    </section>
+
+    <section>
+      {?class.constructor}
+      <a name="{class.className}"></a>
+      <div class="page-header">
+        <h2>{class.className}</h2>
+      </div>
+      {?class.constructor.extends}
+        <td>Унаследован от <a href="{#url class=class.constructor.extends}docs{/url}">{class.constructor.extends}</a></td>
+      {/class.constructor.extends}<br/>
+      <p>{#class.constructor.description}{.|s}<br/>{/class.constructor.description}</p>
+      {?class.constructor.params.length}
+        <p><b>Параметры</b></p>
+        <table class="table table-bordered table-condensed">{#class.constructor.params}
+          {?default_value}
+            <tr><td><i>{name}</i></td><td><i>{{type|s}}</i></td>
+              <td><i>Необязательный, значение по умолчанию: {default_value|s}</i><br/>{description|s}</td></tr>
+          {:else}
+            <tr><td>{name}</td><td><i>{{type|s}}</i></td><td>{description|s}</td></tr>
+          {/default_value}
+        {/class.constructor.params}</table>
+      {/class.constructor.params.length}
+      {?class.constructor.properties.length}<table class="table table-bordered table-condensed">{#class.constructor.properties}
+        <tr><td>{name}</td><td><i>{{type|s}}</i></td><td>{description|s}</td></tr>
+      {/class.constructor.properties}</table>{/class.constructor.properties.length}
+      {?class.constructor.method_throws}
+        <p><b>Ошибка</b></p>
+        <table class="table table-bordered table-condensed">
+        <tr><td><i>{{class.constructor.method_throws.type}}</i></td><td>{class.constructor.method_throws.description|s}</td></tr>
+        </table>
+      {/class.constructor.method_throws}
+      {?class.constructor.returns}
+        <p><b>Возвращает</b></p>
+        <table class="table table-bordered table-condensed">
+        <tr><td><i>{{class.constructor.returns.type}}</i></td><td>{class.constructor.returns.description|s}</td></tr>
+        </table>
+      {/class.constructor.returns}
+      {?class.constructor.example}
+      <p><b>Пример</b></p>
+      <p>{#class.constructor.example}{.|s}<br/>{~n}{/class.constructor.example}</p>
+      {/class.constructor.example}
+      {?class.constructor.see}
+        <p><b>Смотри также:</b></p>
+        <p>
+        {#class.constructor.see}{type|s}{@sep} {/sep}{/class.constructor.see}
+        </p>
+      {/class.constructor.see}
+      {/class.constructor}
+
+      {?class.events}
+      <div class="page-header">
+        <h2>События</h2>
+      </div>
+      {#class.events}
+      <section class="sub" id="event:{event_name}">
+        <div class="page-header">
+          <h3>{event_name}</h3>
+        </div>
+        <p>{#description}{.|s}<br/>{/description}</p>
+      {?properties.length}<table class="table table-bordered table-condensed">{#properties}
+        <tr><td>{name}</td><td><i>{{type|s}}</i></td><td>{description|s}</td></tr>
+      {/properties}</table>{/properties.length}
+      {?params.length}
+      <p>Параметры</p>
+      <table class="table table-bordered table-condensed">
+        <tr><th>Параметр</th><th>Тип</th><th>Описание</th></tr>
+       {#params}
+        <tr><td>{name}</td><td><i>{{type|s}}</i></td><td>{description|s}</td></tr>
+      {/params}</table>
+      {/params.length}
+      {?example}
+      <p><b>Пример</b></p>
+      <p>{#example}{.|s}<br/>{~n}{/example}</p>
+      {/example}
+      {?see}
+        <p><b>Смотри также:</b></p>
+        <p>
+        {#see}{type|s}{@sep} {/sep}{/see}
+        </p>
+      {/see}
+        <hr/>
+      </section>
+      {/class.events}{/class.events}
+
+      {?class.properties}
+      <div class="page-header">
+        <h2>Свойства</h2>
+      </div>
+        {#class.properties}
+      <section class="sub" id="{trim_name}">
+        <div class="page-header">
+          <h3><small>{?static}static{/static} {privacy} </small>{name}<small> : <i>{{type|s}}</i></small></h3>
+        </div>
+          <p>{#description}{.|s}<br/>{/description}</p>
+          {?properties.length}<table class="table table-bordered table-condensed">{#properties}
+            <tr><td>{name}</td><td><i>{{type|s}}</i></td><td>{description|s}</td></tr>
+          {/properties}</table>{/properties.length}
+        {?example}
+        <p><b>Пример</b></p>
+        <p>{#example}{.|s}<br/>{~n}{/example}</p>
+        {/example}
+        {?see}
+          <p><b>Смотри также:</b></p>
+          <p>
+          {#see}{type|s}{@sep} {/sep}{/see}
+          </p>
+        {/see}
+          <hr/>
+      </section>
+        {/class.properties}{/class.properties}
+
+      {?class.methods}
+        <div class="page-header">
+          <h2>Методы</h2>
+        </div>
+        {#class.methods}
+        <section class="sub" id="{trim_name}">
+          <div class="page-header">
+            <h3><small>{?static}static{/static} {privacy} {?returns}<i>{{returns.type|s}}</i>{/returns} </small>{name}</h3>
+          </div>
+          {?extends}<td>Унаследован от <a href="{#url class=extends}docs{/url}"> {extends}</a></td>{/extends}<br/>
+          <p>{#description}{.|s}<br/>{/description}</p>
+          {?params.length}
+            <p><b>Параметры</b></p>
+            <table class="table table-bordered table-condensed">
+              <tr><th>Параметр</th><th>Тип</th><th>Описание</th></tr>
+              {#params}
+              {?default_value}
+                <tr><td><i>{name}</i></td><td><i>{{type|s}}</i></td>
+                  <td><i>Необязательный, значение по умолчанию: {default_value|s}</i><br/>{description|s}</td></tr>
+              {:else}
+                <tr><td>{name}</td><td><i>{{type|s}}</i></td><td>{description|s}</td></tr>
+              {/default_value}
+              {/params}</table>
+        {/params.length}
+        {?properties.length}<table>{#properties}
+          <tr><td>{name}</td><td><i>{{type|s}}</i></td><td>{description|s}</td></tr>
+        {/properties}</table>{/properties.length}
+        {?method_throws}
+          <p><b>Ошибка</b></p>
+          <table class="table table-bordered table-condensed">
+          <tr><td><i>{{method_throws.type|s}}</i></td><td>{method_throws.description|s}</td></tr>
+          </table>
+        {/method_throws}
+        {?returns}
+          <p><b>Возвращает</b></p>
+          <table class="table table-bordered table-condensed">
+          <tr><td><i>{{returns.type|s}}</i></td><td>{returns.description|s}</td></tr>
+          </table>
+        {/returns}
+        {?example}
+        <p><b>Пример</b></p>
+        <p>{#example}{.|s}<br/>{~n}{/example}</p>
+        {/example}
+        {?see}
+          <p><b>Смотри также:</b></p>
+          <p>
+          {#see}{type|s}{@sep} {/sep}{/see}
+          </p>
+        {/see}
+        <hr/>
+        </section>
+        {/class.methods}
+      {/class.methods}
+      <!--</div>-->
+    </section>
+  {/main_content}
+
+  {:else}
+    <section id="class-reference">
+      <table class="table table-bordered table-condensed">
+        {#classes}
+        <tr>
+          <td><a href="{#url class=className}docs{/url}">{className}</a></td>
+          <td>{constructor.short_description|s}</td>
+        </tr>
+        {/classes}
+      </table>
+    </section>
+  {/class}
+
+{/content}

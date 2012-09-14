@@ -1,0 +1,79 @@
+{>"main_header.html"/}
+{<head}
+  <script type="text/javascript" src="/js/ckeditor/ckeditor.js"></script>
+{/head}
+
+{<header}
+  <h1>Новая статья</h1>
+{/header}
+
+{<content}
+  <section>
+  {?auth}
+    <form name="send_form" action="{#url}save{/url}" method="post">
+      <p>
+        <input type="text" name="name" value="{?article}{article.name}{:else}{article_name}{/article}" />
+      </p>
+      <p>
+        <textarea class="ckeditor" cols="80" id="editor1" name="description" rows="10">
+          {article.description}
+        </textarea>
+      </p>
+      <p>
+        <input type="radio" name="news" value="0" {^article.is_news}checked{/article.is_news} /> Статья<br/>
+        <input type="radio" name="news" value="1" {?article.is_news}checked{/article.is_news} /> Новость
+        <input type="radio" name="news" value="2" style='display: none' />
+      </p>
+      <p>
+        <input type="hidden" name="id" value="{article.id}" />
+        <input type="submit" value="Опубликовать" />&nbsp;
+        <input type="button" value="Сохранить" onclick="save();"/>
+      </p>
+    </form>
+
+    <hr/>
+    <p>
+    <div class="clearfix">
+      <div class="input">
+        <input type="button" class="span4" value="Перезагрузить adwiki" onclick="reload();" />
+        <div id="new_classes"></div>
+      </div>
+    </div>
+    </p>
+
+  {:else}
+    <form name="login" action="{#url}login{/url}" method="post" class="form-stacked">
+      <fieldset>
+      <legend>Login</legend>
+        <div class="clearfix">
+          <label for="login">login</label>
+          <div class="input">
+            <input type="text" id="login" name="login" class="span4">
+          </div>
+        </div>
+        <div class="clearfix">
+          <label for="pass">password</label>
+          <div class="input">
+            <input type="password" id="pass" name="pass">
+          </div>
+        </div>
+        <div class="clearfix">
+          <button class="btn primary" type="submit">Login</button>
+        </div>
+      </fieldset>
+    </form>
+  {/auth}
+  </section>
+<script type="text/javascript">
+function reload(){
+  $.post( "{#url}reload{/url}",{a:1},
+      function( result ){
+        $('#new_classes').html( result.classes );
+      }, 'json' );
+}
+function save(){
+  $('input[type=radio][value=2]').attr('checked', 'checked');
+  document.forms.send_form.submit();
+}
+</script>
+{/content}

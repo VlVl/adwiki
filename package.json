@@ -1,14 +1,18 @@
 {
   "name"          : "adwiki",
   "description"   : "autodafe component for generating documentation",
-  "keywords"      : [ "autodafe", "component", "jsdoc" ],
+  "keywords"      : [ "jsdoc", "documentation", "wiki" ],
   "version"       : "0.1.0",
   "author"        : "Vladimir Balakirev <bvlvl2003@rambler.ru>",
-  "main"          : "./components/jsdoc_parser.js",
+  "main"          : "./jsdoc_parser.js",
   "repository"    : {
     "type" : "git",
     "url"  : "git://github.com/VlVl/adwiki.git"
   },
-  "dependencies"  : {},
+  "dependencies"  : {
+    "autodafe"      : ">=0.4.0",
+    "bootstrap"     : ">=2.0.0",
+    "less"          : ">=1.2.2"
+  },
   "engines"       : { "node": ">=0.4.0" }
 }

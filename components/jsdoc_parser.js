@@ -1,10 +1,9 @@
-var Component = global.autodafe.Component;
 var fs        = require('fs');
 var path      = require('path');
 var Class     = require( './lib/class.js' );
 
 
-module.exports = JSDocParser.inherits( Component ); // наследуем от Component
+module.exports = JSDocParser.inherits( global.autodafe.Component );
 
 /**
  * Пользовательский компонент
@@ -36,7 +35,6 @@ JSDocParser.prototype._init = function ( params ) {
 
   this._classes = {};
   this.dir = path.normalize( params.dir ) || path.normalize( '..' ); 
-  this.add_rules();
   this.collect_classes( this.dir );
   this.create_types_links();
 }
@@ -170,16 +168,10 @@ JSDocParser.prototype.create_types_links = function(){
   } )
 }
 
-JSDocParser.prototype.add_rules = function(){
-  var router = this.app.router;
-  router.add_rule( 'class', 'site.docs' );
-  router.add_rule( 'class/<class:\[A-Za-z:#]+>', 'site.docs' );
-  router.add_rule( 'reload', 'site.reload' );
-}
 
 JSDocParser.prototype.link = function( str ){
   var tmp = str.split( '.' );
-  var link = '<a href="' + this.app.router.create_url( 'site.docs', { class : tmp[ 0 ] });
+  var link = '<a href="' + this.app.router.create_url( 'wiki.docs', { class : tmp[ 0 ] });
   link += tmp[ 1 ] ? ( '#' + tmp[ 1 ] ) : '';
   link += '">' + str + '</a>' ;
   return link;

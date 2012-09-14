@@ -1,0 +1,37 @@
+{>"main_header.html"/}
+{<header}
+  <h1>Autodafé <small>node.js mvc фреймворк</small></h1>
+{/header}
+
+{<content}
+  {?article}
+  <section id="article">
+    <div class="article_content">
+      {article.description|s}
+    </div>
+
+    <!--<a href="{#url post=article.name}article{/url}#new_comment" class="btn btn-info">-->
+      <!--<i class="icon-comment icon-white"></i>Коментировать-->
+    <!--</a>-->
+  </section>
+  {/article}
+
+  {?news}
+  <header><h1>Новости</h1></header>
+
+  <section id="news">
+    {#news}
+      <div class="article-header">
+        <h2><a href="{#url post=name}blog.article{/url}">{name}</a></h2>
+      </div>
+      <div class="article_content">
+        {description|s}
+      </div>
+      <!--<a href="{#url post=name}article{/url}#new_comment" class="btn btn-info">-->
+        <!--<i class="icon-comment icon-white"></i>Коментировать-->
+      <!--</a>-->
+      {@sep}<hr/>{/sep}
+    {/news}
+  </section>
+  {/news}
+{/content}

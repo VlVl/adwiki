@@ -1,0 +1,128 @@
+{>"main_header.html"/}
+
+{!<head}
+ <script type="text/javascript" src="/js/dust.js"></script>
+ <script type="text/javascript" src="/js/templates/comments.js"></script>
+{/head!}
+
+{<title}{?article} - {article.name}{:else} - Статья не найдена{/article}{/title}
+
+{<header}
+  {?article}
+    {?auth}
+      <a href="#" onclick="if ( confirm('Вы правда хотите удалить статью?') ) window.location = '{#url post=article.id}remove{/url}'; return false;" class="btn btn-danger" style="float: right;">
+        <i class="icon-trash icon-white"></i>Удалить
+      </a>
+      <span style="float: right;">&nbsp;</span>
+      <a href="{#url post=article.id}edit{/url}" class="btn btn-info" style="float: right;">
+        <i class="icon-pencil icon-white"></i>Редактировать
+      </a>
+    {/auth}
+    <h1>{article.name}</h1>
+  {:else}
+    <h1>404</h1>
+  {/article}
+{/header}
+
+{<content}
+  {>"page_hiding_list.html"/}
+
+  {<list}
+    <ul class="nav nav-list">
+      <li class="nav-header">
+        Статьи
+      </li>
+      {#articles}
+        <li><a href="{#url post=name}article{/url}">{name}</a></li>
+      {/articles}
+      {?auth}
+      <li class="nav-header">
+        Новости
+      </li>
+      {#news}
+        <li><a href="{#url post=name}article{/url}">{name}</a></li>
+      {/news}
+      <li class="nav-header">Управление</li>
+      <li><a href="{#url}edit{/url}">Новая статья</a></li>
+      {?unpublished}
+      <li class="nav-header">Неопубликованные</li>
+      {#unpublished}
+      <li><a href="{#url post=name}article{/url}">{name}</a></li>
+      {/unpublished}
+      {/unpublished}
+      {/auth}
+    </ul>
+  {/list}
+
+  {<main_content}
+    {?article}
+      <section id="article">
+        {article.description|s}
+      </section>
+
+      {!<section id="new_comment">
+        <form name="comment" action="{#url}comment{/url}" method="post" class="well">
+          <fieldset>
+            <legend>Ваш комментарий</legend>
+            <div class="clearfix">
+              <label for="name">Укажите имя</label>
+              <div class="input">
+                <input type="text" id="name" name="name" class="span4" placeholder="anonymous">
+              </div>
+            </div>
+            <div class="clearfix">
+              <label for="text">Введите текст</label>
+              <div class="input">
+                <textarea id="text" class="span6" rows="3" name="text"></textarea>
+              </div>
+            </div>
+            <div class="clearfix">
+              <button class="btn primary" onclick="return send();">Отправить</button>
+            </div>
+          </fieldset>
+        </form>
+      </section>!}
+
+      <!--<section id="comments">-->
+        {!>"{cd}/comments.html"/!}
+      <!--</section>-->
+    {:else}
+      <section><div class="alert span6">
+        <strong>Статья не найдена</strong>
+      </div></section>
+    {/article}
+  {/main_content}
+
+
+<script type="text/javascript">
+function send(){
+  var name = $('#name')[0].value || 'ananymous';
+  var text = $('#text')[0].value;
+  var post_id = {?article} {article.id} {:else} 0 {/article};
+
+  if( post_id == 0 ) {
+    alert('чего комментируешь?! статьи-то нет!!');
+    return false;
+  }
+
+  if( text == '' ) {
+    alert('а где текст?!');
+    return false;
+  }
+  $.post( "{#url}comment{/url}", {
+    name : name,
+    text : text,
+    post_id : post_id
+  }, function( result ){
+      dust.render( 'comments', {
+            comments : [ result ]
+        }, function( err,html){
+            $('#comments').prepend( '<hr/>' );
+            $('#comments').prepend( html );
+            $('#text')[0].value = '';
+            } )
+    }, 'json' );
+  return false;
+}
+</script>
+{/content}
