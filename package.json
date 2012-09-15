@@ -10,9 +10,9 @@
     "url"  : "git://github.com/VlVl/adwiki.git"
   },
   "dependencies"  : {
-    "autodafe"      : ">=0.4.0",
-    "bootstrap"     : "*",
-    "less"          : ">=1.2.2"
+    "autodafe"          : ">=0.4.0",
+    "twitter-bootstrap" : ">=2.1.1",
+    "less"              : ">=1.2.2"
   },
   "engines"       : { "node": ">=0.4.0" }
 }
