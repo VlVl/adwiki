@@ -32,7 +32,7 @@ Site.prototype._compile_templates = function(){
 
   var style = fs.readFileSync( path.join( this.app.base_dir, 'static/css/style.less' ), 'utf8' );
   var parser = new less.Parser({
-      paths: [ path.join( this.app.base_dir, 'node_modules/bootstrap/less/' ) ]//, // Specify search paths for @import directives
+      paths: [ path.join( this.app.base_dir, 'node_modules/twitter-bootstrap/less/' ) ]//, // Specify search paths for @import directives
 //      filename: 'style.less' // Specify a filename, for better error messages
   });
 
