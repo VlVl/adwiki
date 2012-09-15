@@ -11,7 +11,7 @@
   },
   "dependencies"  : {
     "autodafe"      : ">=0.4.0",
-    "bootstrap"     : ">=2.0.0",
+    "bootstrap"     : "*",
     "less"          : ">=1.2.2"
   },
   "engines"       : { "node": ">=0.4.0" }
