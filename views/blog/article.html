@@ -11,11 +11,10 @@
   {?article}
     {?auth}
       <a href="#" onclick="if ( confirm('Вы правда хотите удалить статью?') ) window.location = '{#url post=article.id}remove{/url}'; return false;" class="btn btn-danger" style="float: right;">
-        <i class="icon-trash icon-white"></i>Удалить
+        <i class="icon-trash icon-white"></i> Удалить
       </a>
-      <span style="float: right;">&nbsp;</span>
       <a href="{#url post=article.id}edit{/url}" class="btn btn-info" style="float: right;">
-        <i class="icon-pencil icon-white"></i>Редактировать
+        <i class="icon-pencil icon-white"></i> Редактировать
       </a>
     {/auth}
     <h1>{article.name}</h1>
@@ -28,30 +27,7 @@
   {>"page_hiding_list.html"/}
 
   {<list}
-    <ul class="nav nav-list">
-      <li class="nav-header">
-        Статьи
-      </li>
-      {#articles}
-        <li><a href="{#url post=name}article{/url}">{name}</a></li>
-      {/articles}
-      {?auth}
-      <li class="nav-header">
-        Новости
-      </li>
-      {#news}
-        <li><a href="{#url post=name}article{/url}">{name}</a></li>
-      {/news}
-      <li class="nav-header">Управление</li>
-      <li><a href="{#url}edit{/url}">Новая статья</a></li>
-      {?unpublished}
-      <li class="nav-header">Неопубликованные</li>
-      {#unpublished}
-      <li><a href="{#url post=name}article{/url}">{name}</a></li>
-      {/unpublished}
-      {/unpublished}
-      {/auth}
-    </ul>
+    {>"{cd}/articles.html"/}
   {/list}
 
   {<main_content}

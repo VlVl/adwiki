@@ -16,11 +16,17 @@ Blog.prototype._init = function( params ){
 }
 
 
+Blog.prototype.global_view_params = function(){
+  var params  = Blog.parent.global_view_params.call( this );
+  params.page = "blog";
+  return params;
+}
+
+
 Blog.prototype.article = function( response, request ){
   response.send({
     auth        : this._is_auth,
     articles    : this.models.post.find_all_by_attributes({ news : 0 }, { order : 'id' }),
-    news        : this.models.post.find_all_by_attributes({ news : 1 }, { order : 'id' }),
     unpublished : this.models.post.find_all_by_attributes({ news : 2 }, { order : 'id' }),
     article     : this.models.post.With('comments').find_by_attributes({
       name        : request.params.post || this.app.params.default_post

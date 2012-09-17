@@ -59,7 +59,7 @@ var config = module.exports = {
       'remove/<post:\\d+>'        : 'blog.remove',
       'save'                      : 'blog.save    | post',
 //      'comment'                   : 'blog.comment | post',
-      'login'                     : 'site.login   | post',
+      'login'                     : 'site.login',
       'class'                     : 'wiki.docs',
       'class/<class:[A-Za-z:#]+>' : 'wiki.docs',
       'reload'                    : 'wiki.reload',
@@ -111,9 +111,10 @@ var config = module.exports = {
 
       // здесь указываются директории в которых ищутся файлы
       root_folders    : {
-        js       : 'static/js',
-        css      : 'static/css',
-        img      : 'node_modules/bootstrap/img'
+        js        : 'static/js',
+        css       : 'static/css',
+        img       : 'node_modules/twitter-bootstrap/img',
+        bootstrap : 'node_modules/twitter-bootstrap/js'
       }
     },
 

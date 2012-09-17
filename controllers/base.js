@@ -7,12 +7,14 @@ function Base(params){
 
 Base.prototype.global_view_params = function(){
   return {
-    project_name : this.app.params.project_name
+    project_name : this.app.params.project_name,
+    page         : "",
+    page_name    : ""
   }
 }
 
 
 Base.prototype._is_auth = function( request ){
-  return true;//request.client.get_cookie( 'autodafe_user' )
-//    && request.client.get_cookie( 'autodafe_pass' );
+  return request.client.get_cookie( 'autodafe_user' )
+      && request.client.get_cookie( 'autodafe_pass' );
 }

@@ -17,6 +17,13 @@ Wiki.prototype._init = function( params ){
 }
 
 
+Wiki.prototype.global_view_params = function(){
+  var params  = Wiki.parent.global_view_params.call( this );
+  params.page = "docs";
+  return params;
+}
+
+
 Wiki.prototype.docs = function ( response, request ) {
   response.send({
     class   : this.app.jsdoc_parser.get_class_by_name( request.params.class ),

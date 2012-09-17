@@ -1,0 +1,26 @@
+<ul class="nav nav-list">
+  <li class="nav-header">
+    Статьи
+  </li>
+  {#articles}
+    <li><a href="{#url post=name}article{/url}">{name}</a></li>
+  {/articles}
+
+  <li class="nav-header">
+    Новости
+  </li>
+  {#news}
+    <li><a href="{#url post=name}article{/url}">{name}</a></li>
+  {/news}
+
+  {?auth}
+    <li class="nav-header">Управление</li>
+    <li><a href="{#url}edit{/url}">Новая статья</a></li>
+    {?unpublished}
+      <li class="nav-header">Неопубликованные</li>
+      {#unpublished}
+        <li><a href="{#url post=name}article{/url}">{name}</a></li>
+      {/unpublished}
+    {/unpublished}
+  {/auth}
+</ul>
