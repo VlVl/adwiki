@@ -10,7 +10,7 @@
 {<header}
   {?article}
     {?auth}
-      <a href="#" onclick="if ( confirm('Вы правда хотите удалить статью?') ) window.location = '{#url post=article.id}remove{/url}'; return false;" class="btn btn-danger" style="float: right;">
+      <a href="#" onclick="if ( confirm('Вы правда хотите удалить статью?') ) window.location = '{#url post=article.id}remove{/url}'; return false;" class="btn btn-danger" style="float: right; margin-left: 15px;">
         <i class="icon-trash icon-white"></i> Удалить
       </a>
       <a href="{#url post=article.id}edit{/url}" class="btn btn-info" style="float: right;">
@@ -32,9 +32,7 @@
 
   {<main_content}
     {?article}
-      <section id="article">
-        {article.description|s}
-      </section>
+      {article.description|s}
 
       {!<section id="new_comment">
         <form name="comment" action="{#url}comment{/url}" method="post" class="well">
