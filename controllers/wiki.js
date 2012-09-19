@@ -25,9 +25,17 @@ Wiki.prototype.global_view_params = function(){
 
 
 Wiki.prototype.docs = function ( response, request ) {
+  var parser  = this.app.jsdoc_parser;
+  var clazz   = parser.get_class_by_name( request.params.class );
+
+  var parents = [], parent = clazz;
+  while( parent = parser.get_class_by_name( parent.constructor.extends ) )
+    parents.push( parent.className );
+
   response.send({
-    class   : this.app.jsdoc_parser.get_class_by_name( request.params.class ),
-    classes : this.app.jsdoc_parser.get_classes()
+    parents : parents,
+    class   : clazz,
+    classes : parser.get_classes()
   });
 };
 

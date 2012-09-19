@@ -87,13 +87,14 @@ Class.prototype.get_element_by_name = function( name, type, remove ){
 Class.prototype.sort_arrays = function(){
   [ this.events, this.properties, this.methods ]
     .forEach( function( array ){
-      if( array.length )
       array.sort( function( a, b ){
-        if( a.name.toLowerCase() < b.name.toLowerCase() )  return -1;
-        if( a.name.toLowerCase() == b.name.toLowerCase() ) return 0;
-        if( a.name.toLowerCase() > b.name.toLowerCase() )  return 1;
+        a = a.name.toLowerCase().replace(/^_+/, '');
+        b = b.name.toLowerCase().replace(/^_+/, '');
+
+        if( a < b )  return -1;
+        if( a == b ) return 0;
+        if( a > b )  return 1;
       } )
-      else array = null;
     })
 }
 

@@ -98,21 +98,23 @@
   <script type="text/javascript">
     !function(){
       var content_table = $('.content-table');
-      var id            = 0;
+      var n             = 0;
 
       $('h1').add('h2').each(function(){
+        var id          = 'h' + n++;
         var collection  = $(this);
-        var name        = collection.text().trim();
+        var name        = this.childNodes[0].textContent.trim();
         var parent      = collection.parent();
         if ( parent.get(0).tagName == "HEADER" ) {
           collection  = parent;
           parent      = parent.parent();
         }
         if ( parent.get(0).tagName == "SECTION" ) {
-          parent.attr('id', 'h'+id );
+          // если id есть - запоминаем его, если нет - задаем свой
+          id = parent.attr('id') || parent.attr('id', id ) && id;
         }
         else {
-          collection.wrap('<section id="h' + id + '" />');
+          collection.wrap('<section id="h' + n + '" />');
           collection = collection.parent();
 
           var p;
@@ -121,9 +123,8 @@
           }
         }
 
-        var el    = ['<li><a href="#h', id, '"><i class="icon-chevron-right"></i> ', name, '</a></li>'];
+        var el    = ['<li><a href="#', id, '"><i class="icon-chevron-right"></i> ', name, '</a></li>'];
         content_table.append( el.join('') );
-        id++;
       });
     }()
   </script>

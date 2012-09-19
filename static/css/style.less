@@ -9,27 +9,27 @@ body {
   padding-bottom: 40px;
 }
 
-//body, p{
-//  font-family:Arial, Verdana, Helvetica, sans-serif;
-//}
+td i[class^="icon-"] {
+  opacity: .5;
+}
 
-//
-//h2 {
-//  margin: 15px 0;
-//}
-//
-//h3 {
-//  margin: 10px 0;
-//  font-size:17px;
-//}
-//
-//h4 {
-//  margin: 8px 0;
-//}
-//
-//h3, h4{
-//  font-family:Verdana;
-//}
+td i[class^="icon-"]:hover {
+  opacity: 1;
+}
+
+td code, dd code, .prettyprint.inline {
+  border: 0 !important;
+  padding: 2px !important;
+  background: transparent !important;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+.capitalize:first-letter {
+  text-transform: uppercase;
+}
 
 #list_content{
   font-size:13px;
@@ -43,39 +43,19 @@ body {
     margin: 0 -15px 15px;
   }
 
-
   section {
     padding-top: 40px;
     margin-top: -40px;
-
-//    .article_content {
-//      margin-bottom: 20px;
-//    }
-//
-//    .row {
-//      margin-right: -20px;
-//
-//      section {
-//        margin: 0;
-//        margin-bottom:20px;
-//      }
-//    }
   }
-
-//  .article-header {
-//    margin: 20px 0;
-//  }
 
   &.content {
     padding : 40px 15px 20px;
-//    padding-bottom: 20px;
     margin-bottom: 20px;
     background-color: @white;
     .border-radius( 0 0 6px 6px );
     .box-shadow( 0 1px 2px rgba(0,0,0,.15) );
   }
 }
-
 
 .nav-list.content-table {
   width: 215px;
@@ -136,6 +116,49 @@ body {
 
 .nav-list.content-table.affix {
   top: 55px;
+}
+
+
+
+/* Bootstrap code examples
+-------------------------------------------------- */
+
+/* Base class */
+.example {
+  position: relative;
+  margin: 15px 0;
+  padding: 39px 19px 14px;
+  *padding-top: 19px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+/* Echo out a label for the example */
+.example:after {
+  content: "Пример";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #9da0a4;
+  -webkit-border-radius: 4px 0 4px 0;
+  -moz-border-radius: 4px 0 4px 0;
+  border-radius: 4px 0 4px 0;
+}
+
+/* Remove spacing between an example and it's code */
+.example .prettyprint {
+  margin: 0 -19px;
+  border-left: 0;
+  border-right: 0;
+  .border-radius(0);
 }
 
 

@@ -37,4 +37,10 @@ ClassElement.prototype._init = function( params ){
     var tmp = this.name.split( '#' );
     return tmp[ 1 ].trim() || tmp[ 0 ].trim();
   }
+
+  this._.top_params.get = function(){
+    return this.params && this.params.filter(function( param ){
+      return !/\./.test( param.name );
+    });
+  }
 };

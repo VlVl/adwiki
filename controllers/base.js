@@ -9,7 +9,13 @@ Base.prototype.global_view_params = function(){
   return {
     project_name : this.app.params.project_name,
     page         : "",
-    page_name    : ""
+    page_name    : "",
+    articles     : this.models.post.find_all_by_attributes({
+      news : 0
+    }, {
+      select : 'id, name',
+      order : 'id'
+    })
   }
 }
 

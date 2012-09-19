@@ -51,7 +51,6 @@ Site.prototype._compile_templates = function(){
 Site.prototype.index = function( response, request ){
   response.send({
     auth        : this._is_auth,
-    articles    : this.models.post.find_all_by_attributes({ news : 0 }, { order : 'id' }),
     unpublished : this.models.post.find_all_by_attributes({ news : 2 }, { order : 'id' }),
     article     : this.models.post.find_by_attributes({ name : this.app.params.default_post }),
     news        : this.models.post.find_all_by_attributes({ news : 1 }, { order : 'date DESC' }),
