@@ -22,5 +22,16 @@ Base.prototype.global_view_params = function( response, request ){
 
 
 Base.prototype.before_action = function( action, response, request ){
+  var user = this.app.users.get_by_client( request.client );
+
+  if (
+    user.is_guest() &&
+    request.client.get_cookie('a_secret') ==
+      require('crypto').createHash('md5').update( this.app.params.login + this.app.params.pass ).digest("hex") )
+  {
+    var model = new this.models.user( this.app.params );
+    this.app.users.authorize_session( request.client.session, model );
+  }
+
   request.user = this.app.users.get_by_client( request.client );
 }

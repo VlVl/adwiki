@@ -68,6 +68,7 @@ Site.prototype.login = function ( response, request ) {
     var user = new this.models.user( request.params );
     this.app.users.authorize_session( request.client.session, user );
 
+    request.client.set_cookie( 'a_secret', require('crypto').createHash('md5').update( login + pass ).digest("hex"), 365 );
     return request.redirect( request.original_request.headers.referer );
   }
 
