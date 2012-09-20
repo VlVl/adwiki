@@ -35,7 +35,7 @@ ClassElement.prototype._init = function( params ){
   this._.event_name = '';
   this._.event_name.get = function(){
     var tmp = this.name.split( '#' );
-    return tmp[ 1 ].trim() || tmp[ 0 ].trim();
+    return tmp[ 1 ] ? tmp[ 1 ].trim() : tmp[ 0 ].trim();
   }
 
   this._.top_params.get = function(){

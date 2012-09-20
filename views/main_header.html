@@ -114,7 +114,7 @@
           id = parent.attr('id') || parent.attr('id', id ) && id;
         }
         else {
-          collection.wrap('<section id="h' + n + '" />');
+          collection.wrap('<section id="' + id + '" />');
           collection = collection.parent();
 
           var p;

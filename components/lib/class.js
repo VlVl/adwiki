@@ -22,7 +22,7 @@ Class.prototype._init = function( params ){
 //      param: /@param\s+([{a-zA-Z|_.}]*?)\s+([a-zA-Z_]+?)\s+(.*?)@/ig,
       param: /@param\s+([{a-zA-Z|_.}]*?)\s+(.*?)@/ig,
       property: /@property\s+{(\w+)}\s+(.+?)\s+(.*?)@/ig,
-      returns: /@returns\s+{(.+?)}\s+(.*?)@/i,
+      returns: /@returns?\s+{(.+?)}\s+(.*?)@/i,
       privacy: /@(public|private|protected)/i,
       static: /@static/i,
       field: /@field/i,

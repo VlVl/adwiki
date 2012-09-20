@@ -26,6 +26,7 @@ Blog.prototype.global_view_params = function(){
 Blog.prototype.article = function( response, request ){
   response.send({
     auth        : this._is_auth,
+    news        : this.models.post.find_all_by_attributes({ news : 1 }, { order : 'id' }),
     unpublished : this.models.post.find_all_by_attributes({ news : 2 }, { order : 'id' }),
     article     : this.models.post.With('comments').find_by_attributes({
       name        : request.params.post || this.app.params.default_post

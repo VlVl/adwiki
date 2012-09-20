@@ -10,7 +10,7 @@
     {/parents}</h1>
     <a href="{#url class=class.className}wiki.file{/url}">{class.short_path}</a>
   {:else}
-    <h1>Список классов Autodafe</h1>
+    <h1>Список классов используемых в {project_name}</h1>
   {/class}
 {/header}
 
@@ -35,7 +35,9 @@
   {<main_content}
     <section id="toc">
       <p class="capitalize">{class.constructor.short_description|s}</p>
-      <p><small><a href="#{class.className}">Перейти к полному описанию конструктора >></a></small></p>
+      <p><small><a href="#{class.className}">
+        Перейти к полному описанию конструктора {?class.constructor.example}и примерам использования класса {/class.constructor.example}>>
+      </a></small></p>
 
 
       <!--===============   События - кратко  ================-->
@@ -135,7 +137,7 @@
           <tr>
             <td>Использование</td>
             <td colspan="2">
-              <code class="prettyprint lang-js">new {class.className}( {#class.constructor.top_params}[{type|s}] {name}{@sep}, {/sep}{/class.constructor.top_params} );</code>
+              <code class="prettyprint lang-js">new {class.className}( {#class.constructor.top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/class.constructor.top_params} );</code>
             </td>
           </tr>
 
@@ -184,13 +186,8 @@
       </div>
       {/class.constructor.example}
 
-
-      {?class.constructor.see}
-        <h3>Смотри также</h3>
-        <p>
-        {#class.constructor.see}{type|s}{@sep} {/sep}{/class.constructor.see}
-        </p>
-      {/class.constructor.see}
+      {>"{cd}/parts/see.html" see=class.constructor.see/}
+      {<h}h3{/h}
     </section>
     {/class.constructor}
 
@@ -211,7 +208,7 @@
           <tr>
             <td>Использование</td>
             <td colspan="2">
-              <code class="prettyprint lang-js">{clazz}.on( '{event_name}', function( {#top_params}[{type|s}] {name}{@sep}, {/sep}{/top_params} ){} );</code>
+              <code class="prettyprint lang-js">{clazz}.on( '{event_name}', function( {#top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/top_params} ){} );</code>
             </td>
           </tr>
 
@@ -240,12 +237,7 @@
         </div>
         {/example}
 
-        {?see}
-          <h4>Смотри также</h4>
-          <p>
-          {#see}{type|s}{@sep} {/sep}{/see}
-          </p>
-        {/see}
+        {>"{cd}/parts/see.html" see=see/}
       </section>
       {@sep}<hr/>{/sep}
       {/class.events}
@@ -280,12 +272,7 @@
         </div>
         {/example}
 
-        {?see}
-        <h4>Смотри также</h4>
-        <p>
-          {#see}{type|s}{@sep} {/sep}{/see}
-        </p>
-        {/see}
+        {>"{cd}/parts/see.html" see=see/}
       </section>
       {@sep}<hr/>{/sep}
       {/class.properties}
@@ -316,7 +303,7 @@
             <tr>
               <td>Использование</td>
               <td colspan="2">
-                <code class="prettyprint lang-js">{@if cond="'{privacy}' == 'private'"}this{:else}{clazz}{/if}.{name}( {#top_params}[{type|s}] {name}{@sep}, {/sep}{/top_params} );</code>
+                <code class="prettyprint lang-js">{@if cond="'{privacy}' == 'private'"}this{:else}{clazz}{/if}.{name}( {#top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/top_params} );</code>
               </td>
             </tr>
   
@@ -374,12 +361,7 @@
           </div>
         {/example}
 
-        {?see}
-          <h4>Смотри также</h4>
-          <p>
-            {#see}{type|s}{@sep} {/sep}{/see}
-          </p>
-        {/see}
+        {>"{cd}/parts/see.html" see=see/}
       </section>
       {@sep}<hr/>{/sep}
       {/class.methods}
