@@ -50,7 +50,6 @@ Site.prototype._compile_templates = function(){
 
 Site.prototype.index = function( response, request ){
   response.send({
-    auth        : this._is_auth,
     unpublished : this.models.post.find_all_by_attributes({ news : 2 }, { order : 'id' }),
     article     : this.models.post.find_by_attributes({ name : this.app.params.default_post }),
     news        : this.models.post.find_all_by_attributes({ news : 1 }, { order : 'date DESC' }),
@@ -60,13 +59,29 @@ Site.prototype.index = function( response, request ){
 
 
 Site.prototype.login = function ( response, request ) {
+  if ( request.user.is_authorized()) request.redirect( request.original_request.headers.referer );
+
   var login = this.app.params.login,
-      pass  = this.app.params.pass
+      pass  = this.app.params.pass;
 
   if ( request.params.login == login && request.params.pass == pass ){
-    request.client.set_cookie( 'autodafe_user', login, 365 );
-    request.client.set_cookie( 'autodafe_pass', pass,  365 );
+    var user = new this.models.user( request.params );
+    this.app.users.authorize_session( request.client.session, user );
+
+    return request.redirect( request.original_request.headers.referer );
   }
 
-  this.app.router.get_controller('blog').action('article', response, request);
+  response.merge_params({
+    auth_failed : 'Неверно введен логин или пароль'
+  });
+  this.action('index', response, request);
 };
+
+
+Site.prototype.logout = function( response, request ){
+  if ( request.user.is_authorized() ) {
+    this.app.users.logout_session( request.client.session );
+  }
+
+  request.redirect( request.original_request.headers.referer );
+}

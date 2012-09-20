@@ -18,7 +18,7 @@ Wiki.prototype._init = function( params ){
 
 
 Wiki.prototype.global_view_params = function(){
-  var params  = Wiki.parent.global_view_params.call( this );
+  var params  = Wiki.parent.global_view_params.apply( this, arguments );
   params.page = "docs";
   return params;
 }

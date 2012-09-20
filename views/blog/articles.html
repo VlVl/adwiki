@@ -13,7 +13,7 @@
     <li><a href="{#url post=name}blog.article{/url}">{name}</a></li>
   {/news}
 
-  {?auth}
+  {?user.model}
     <li class="nav-header">Управление</li>
     <li><a href="{#url}blog.edit{/url}">Новая статья</a></li>
     {?unpublished}
@@ -22,5 +22,5 @@
         <li><a href="{#url post=name}blog.article{/url}">{name}</a></li>
       {/unpublished}
     {/unpublished}
-  {/auth}
+  {/user.model}
 </ul>

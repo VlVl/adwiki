@@ -9,14 +9,16 @@
 
 {<header}
   {?article}
-    {?auth}
-      <a href="#" onclick="if ( confirm('Вы правда хотите удалить статью?') ) window.location = '{#url post=article.id}remove{/url}'; return false;" class="btn btn-danger" style="float: right; margin-left: 15px;">
-        <i class="icon-trash icon-white"></i> Удалить
-      </a>
+    {?article.can_be_edited}
+      <form method="post" class="pull-right" action="{#url post=article.id}remove{/url}">
+        <button onclick="if ( confirm('Вы правда хотите удалить статью?')) this.form.submit(); else return false;" class="btn btn-danger" style="margin-left: 8px;">
+          <i class="icon-trash icon-white"></i> Удалить
+        </button>
+      </form>
       <a href="{#url post=article.id}edit{/url}" class="btn btn-info" style="float: right;">
         <i class="icon-pencil icon-white"></i> Редактировать
       </a>
-    {/auth}
+    {/article.can_be_edited}
     <h1>{article.name}</h1>
   {:else}
     <h1>404</h1>

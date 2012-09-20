@@ -36,3 +36,5 @@ Post.prototype.attributes = function(){
     news        : 'safe'
   };
 }
+
+

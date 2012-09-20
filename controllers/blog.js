@@ -17,7 +17,7 @@ Blog.prototype._init = function( params ){
 
 
 Blog.prototype.global_view_params = function(){
-  var params  = Blog.parent.global_view_params.call( this );
+  var params  = Blog.parent.global_view_params.apply( this, arguments );
   params.page = "blog";
   return params;
 }
@@ -28,27 +28,24 @@ Blog.prototype.article = function( response, request ){
     auth        : this._is_auth,
     news        : this.models.post.find_all_by_attributes({ news : 1 }, { order : 'id' }),
     unpublished : this.models.post.find_all_by_attributes({ news : 2 }, { order : 'id' }),
-    article     : this.models.post.With('comments').find_by_attributes({
+    article     : request.user.manage( this.models.post.With('comments').find_by_attributes({
       name        : request.params.post || this.app.params.default_post
-    })
+    }))
   });
 }
 
 
 Blog.prototype.edit = function( response, request ){
-  response.view_name('editor');
+  if ( !request.user.can( 'edit', this.models.post ) ) return request.redirect('/');
 
-  if ( !this._is_auth ) return response.send({ auth : false });
-
-  response.send({
-    auth          : true,
-    article       : this.models.post.find_by_pk( request.params.post )
+  response.view_name('editor').send({
+    article : this.models.post.find_by_pk( request.params.post )
   });
 }
 
 
 Blog.prototype.remove = function( response, request ){
-  if ( !this._is_auth ) return response.view_name('editor').send({ auth : false });
+  if ( !request.user.can( 'remove', this.models.post ) ) return request.redirect('/');
 
   var self = this;
   response
@@ -61,6 +58,8 @@ Blog.prototype.remove = function( response, request ){
 
 
 Blog.prototype.save = function( response, request ){
+  if ( !request.user.can( 'edit', this.models.post ) ) return request.redirect('/');
+
   var listener = response.create_listener();
   var id       = request.params.id;
 
@@ -69,7 +68,11 @@ Blog.prototype.save = function( response, request ){
     listener.stack <<= post.save();
   }
   else
-    listener.stack <<= this.models.post.update_by_pk( id, request.params );
+    listener.stack <<= this.models.post.update_by_pk( id, {
+      name        : request.params.name,
+      description : request.params.description,
+      news        : request.params.news
+    });
 
   listener.success( request.redirect.bind( request, this.create_url('blog.article', {
     post : request.params.name

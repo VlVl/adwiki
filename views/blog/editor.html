@@ -9,7 +9,6 @@
 
 {<content}
   <section>
-  {?auth}
     <form name="send_form" action="{#url}save{/url}" method="post">
       <p>
         <input type="text" name="name" value="{?article}{article.name}{:else}{article_name}{/article}" />
@@ -40,11 +39,10 @@
       </div>
     </div>
     </p>
-  {/auth}
   </section>
 <script type="text/javascript">
 function reload(){
-  $.post( "{#url}reload{/url}",{a:1},
+  $.post( "{#url}wiki.reload{/url}",{a:1},
       function( result ){
         $('#new_classes').html( result.classes );
       }, 'json' );

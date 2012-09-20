@@ -56,10 +56,11 @@ var config = module.exports = {
       'article/<post:.+?>'        : 'blog.article',
       'edit'                      : 'blog.edit',
       'edit/<post:\\d+>'          : 'blog.edit',
-      'remove/<post:\\d+>'        : 'blog.remove',
+      'remove/<post:\\d+>'        : 'blog.remove  | post',
       'save'                      : 'blog.save    | post',
 //      'comment'                   : 'blog.comment | post',
-      'login'                     : 'site.login',
+      'login'                     : 'site.login   | post',
+      'logout'                    : 'site.logout',
       'class'                     : 'wiki.docs',
       'class/<class:[A-Za-z:#]+>' : 'wiki.docs',
       'reload'                    : 'wiki.reload',
@@ -103,7 +104,24 @@ var config = module.exports = {
     my_tools     : true,
 
     // компонент управляющий правами пользователей
-    users    : true,
+    users   : {
+      model   : 'user',
+      roles   : {
+        user  : '!!user.login',
+        admin : function( user, app ) {
+          return user.login == app.params.login;
+        }
+      },
+      roles_groups : {
+        all : 'admin, guest, user'
+      },
+      rights : {
+        create  : 'admin',
+        view    : 'all',
+        edit    : 'admin',
+        remove  : 'admin'
+      }
+    },
 
     // http сервер
     http                : {

@@ -7,7 +7,7 @@ function User( params ){
 
 User.prototype.attributes = function(){
   return {
-    name : 'safe',
-    id   : 'key'
+    login : 'safe',
+    id    : 'key'
   };
 }

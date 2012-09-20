@@ -5,8 +5,9 @@ function Base(params){
 }
 
 
-Base.prototype.global_view_params = function(){
+Base.prototype.global_view_params = function( response, request ){
   return {
+    user         : request.user,
     project_name : this.app.params.project_name,
     page         : "",
     page_name    : "",
@@ -20,7 +21,6 @@ Base.prototype.global_view_params = function(){
 }
 
 
-Base.prototype._is_auth = function( request ){
-  return request.client.get_cookie( 'autodafe_user' )
-      && request.client.get_cookie( 'autodafe_pass' );
+Base.prototype.before_action = function( action, response, request ){
+  request.user = this.app.users.get_by_client( request.client );
 }
