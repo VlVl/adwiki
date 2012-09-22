@@ -13,6 +13,7 @@ exports.run = function( options ){
   config.params['login']    = options.user;
   config.params['pass']     = options.password;
   config.params['project']  = Object.merge( config.params['project'], options.project );
+  config.params['default_post'] = options.project.start_page;
 
   if ( options.db ) config.components.db = Object.merge( config.components.db, options.db );
 
