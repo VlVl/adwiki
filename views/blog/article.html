@@ -5,7 +5,7 @@
  <script type="text/javascript" src="/js/templates/comments.js"></script>
 {/head!}
 
-{<title}{?article} - {article.name}{:else} - Статья не найдена{/article}{/title}
+{<title}{?article}{article.name} - {:else}Статья не найдена - {/article}{/title}
 
 {<header}
   {?article}

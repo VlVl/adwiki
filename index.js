@@ -8,19 +8,12 @@ exports.run = function( options ){
     config.components.http.port = options.http_port;
 
   if ( options.project )
-    config.components.jsdoc_parser.dir = options.project;
+    config.components.jsdoc_parser.dir = options.project.path;
 
-  var opt_names = {
-    user        : "login",
-    password    : "pass",
-    start_page  : "default_post",
-    project_name : "project_name"
-  }
+  config.params['login']    = options.user;
+  config.params['pass']     = options.password;
+  config.params['project']  = Object.merge( config.params['project'], options.project );
 
-  for ( var opt in opt_names ){
-    if ( options[ opt ] ) config.params[ opt_names[opt] ] = options[ opt ];
-  }
-  
   if ( options.db ) config.components.db = Object.merge( config.components.db, options.db );
 
   autodafe.create_application( config ).run();

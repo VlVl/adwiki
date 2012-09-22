@@ -7,15 +7,15 @@ function Base(params){
 
 Base.prototype.global_view_params = function( response, request ){
   return {
-    user         : request.user,
-    project_name : this.app.params.project_name,
-    page         : "",
-    page_name    : "",
-    articles     : this.models.post.find_all_by_attributes({
-      news : 0
+    user          : request.user,
+    project       : this.app.params.project,
+    page          : "",
+    page_name     : "",
+    articles      : this.models.post.find_all_by_attributes({
+      news    : 0
     }, {
-      select : 'id, name',
-      order : 'id'
+      select  : 'id, name',
+      order   : 'id'
     })
   }
 }

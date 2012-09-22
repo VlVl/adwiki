@@ -69,7 +69,14 @@ var config = module.exports = {
   },
 
   params  : {
-    project_name  : '',
+    project       : {
+      name        : '',
+      description : '',
+      twitter     : '',
+      github      : '',
+      copy        : '',
+      author      : ''
+    },
     default_post  : 'About project',
     login         : 'admin',
     pass          : ''//,
@@ -131,6 +138,7 @@ var config = module.exports = {
       root_folders    : {
         js        : 'static/js',
         css       : 'static/css',
+        images    : 'static/images',
         img       : 'node_modules/twitter-bootstrap/img',
         bootstrap : 'node_modules/twitter-bootstrap/js'
       }

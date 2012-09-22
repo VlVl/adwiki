@@ -10,11 +10,11 @@
     {/parents}</h1>
     <a href="{#url class=class.className}wiki.file{/url}">{class.short_path}</a>
   {:else}
-    <h1>Список классов используемых в {project_name}</h1>
+    <h1>Список классов используемых в {project.name}</h1>
   {/class}
 {/header}
 
-{<title}{?class} - {class.className}{:else} - Список классов{/class}{/title}
+{<title}{?class}{class.className} - {:else}Список классов - {/class}{/title}
 
 {<content}
 {?class}

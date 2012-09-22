@@ -2,10 +2,10 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>ADWiki - {project_name} {+title/}</title>
+  <title>{+title/}{project.name} - ADWiki</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="description" content="{project.description}">
+  <meta name="author" content="{project.author}">
 
   <link rel="stylesheet" type="text/css" href="/css/style.css"/>
   <link rel="stylesheet" type="text/css" href="/js/google-code-prettify/prettify.css">
@@ -49,7 +49,10 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-        <a class="brand" href="/">{project_name}</a>
+        <!--<a href="{project.github}" id="github">-->
+          <!--<img src="/images/github.png" alt="Fork me on GitHub">-->
+        <!--</a>-->
+        <a class="brand" href="/">{project.name}</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
             <li class='{@if cond="\"{page}\" == \"docs\""}active{/if}'><a href="{#url}wiki.docs{/url}">Документация</a></li>
@@ -64,6 +67,17 @@
                 {/articles}
               </ul>
             </li>
+            {?project.twitter}
+              <li class="img"><a href="{project.twitter}" title="{project.name} on twitter">
+                <img src="/images/twitter.png" alt="Twitter"/>
+              </a></li>
+            {/project.twitter}
+            {?project.github}
+              <li><a href="{project.github}" title="{project.name} on github">
+                <!--<img src="/images/github.png" alt="github"/>-->
+                GitHub
+              </a></li>
+            {/project.github}
           </ul>
 
           {^user.model}
@@ -99,11 +113,12 @@
 
     {+content/}
 
+    {?project.copy}
     <hr>
-
     <footer>
-      {project_name} &copy; {copy}
+      &copy; {project.copy}
     </footer>
+    {/project.copy}
 
   </section>
 
