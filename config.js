@@ -33,7 +33,7 @@ var config = module.exports = {
    *
    * @type {Boolean}
    */
-  cache_views         : false,
+  cache_views         : true,
 
   /**
    * Настройки компонента отвечающего за перенаправление запросов и генерацию запросов
