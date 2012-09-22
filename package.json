@@ -2,7 +2,7 @@
   "name"          : "adwiki",
   "description"   : "autodafe component for generating documentation",
   "keywords"      : [ "jsdoc", "documentation", "wiki" ],
-  "version"       : "0.1.0",
+  "version"       : "0.1.1",
   "author"        : "Vladimir Balakirev <bvlvl2003@rambler.ru>",
   "main"          : "./jsdoc_parser.js",
   "repository"    : {
