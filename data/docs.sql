@@ -1,9 +1,3 @@
--- --------------------------------------------------------
-
---
--- Table structure for table `comments`
---
-
 CREATE TABLE IF NOT EXISTS `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `post_id` int(11) NOT NULL,
@@ -13,13 +7,6 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`id`),
   KEY `post_id` (`post_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `posts`
---
 
 CREATE TABLE IF NOT EXISTS `posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

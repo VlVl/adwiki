@@ -24,7 +24,7 @@ Site.prototype._compile_templates = function(){
 //    var file     = fs.readFileSync( path.join( this.app.base_dir, template ), 'utf8' );
 //    var compiled = this.dust.compile( file, path.basename( template, '.html' ) );
 //    var file_path = path.join( this.app.base_dir, templates[ template ], path.basename( template, '.html' ) + '.js' );
-//    if ( path.existsSync( file_path ) ) fs.unlinkSync( file_path );
+//    if ( fs.existsSync( file_path ) ) fs.unlinkSync( file_path );
 //    var fd = fs.openSync( file_path, 'a', 0666 );
 //    fs.writeSync( fd, compiled, null, 'utf8' );
 //    fs.closeSync( fd );
@@ -40,7 +40,7 @@ Site.prototype._compile_templates = function(){
   parser.parse( style, function (e, tree) {
     var css = tree.toCSS({ compress: true }); // Minify CSS output
     var css_file = path.join( self.app.base_dir, 'static/css/style.css' );
-    if ( path.existsSync( css_file ) ) fs.unlinkSync( css_file );
+    if ( fs.existsSync( css_file ) ) fs.unlinkSync( css_file );
     var fd = fs.openSync( css_file, 'a', 0666 );
     fs.writeSync( fd, css, null, 'utf8' );
     fs.closeSync( fd );
