@@ -126,7 +126,8 @@ var config = module.exports = {
         create  : 'admin',
         view    : 'all',
         edit    : 'admin',
-        remove  : 'admin'
+        remove  : 'admin',
+        reload_adwiki : 'admin'
       }
     },
 

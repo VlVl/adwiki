@@ -29,24 +29,8 @@
         <input type="button" value="Сохранить" onclick="save();"/>
       </p>
     </form>
-
-    <hr/>
-    <p>
-    <div class="clearfix">
-      <div class="input">
-        <input type="button" class="span4" value="Перезагрузить adwiki" onclick="reload();" />
-        <div id="new_classes"></div>
-      </div>
-    </div>
-    </p>
   </section>
 <script type="text/javascript">
-function reload(){
-  $.post( "{#url}wiki.reload{/url}",{a:1},
-      function( result ){
-        $('#new_classes').html( result.classes );
-      }, 'json' );
-}
 function save(){
   $('input[type=radio][value=2]').attr('checked', 'checked');
   document.forms.send_form.submit();
