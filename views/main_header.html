@@ -78,6 +78,9 @@
                 GitHub
               </a></li>
             {/project.github}
+             <li><a href="http://autodafe.ws/article/ADWiki" title="This site powered by ADWiki" target="_blank">
+              ADWiki
+            </a></li>
           </ul>
 
           {^user.model}
@@ -113,12 +116,15 @@
 
     {+content/}
 
-    {?project.copy}
     <hr>
     <footer>
-      &copy; {project.copy}
+      <div class="pull-right">
+        Powered by <a href="http://autodafe.ws/article/ADWiki">ADWiki</a>
+      </div>
+      {?project.copy}
+        &copy; {project.copy}
+      {/project.copy}
     </footer>
-    {/project.copy}
 
   </section>
 
