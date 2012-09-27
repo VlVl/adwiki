@@ -1,112 +1,105 @@
 # ADWiki
 
-ADWiki - система, позволяющая отображать JavaScript документацию онлайн.
-Для этого код должен быть описан по правилам [JSDoc](http://en.wikipedia.org/wiki/JSDoc)
+ADWiki is a system to display JavaScript documentation online. Your code should be documented by
+[JSDoc](http://en.wikipedia.org/wiki/JSDoc) rules.
 
 ##Demo
 
-Живую демонстрацию того, как работает ADWiki можно наблюдать здесь: [here](http://autodafe.ws/class/Application)
-(Пример исходного кода задокументированного файла: [here](http://autodafe.ws/file/Application)  На сайте, который
-запускает ADWiki находится не только сгенерированная из исходного кода докуметация, но и небольшой блог, где Вы можете
-писать статьи для Вашего проекта.
+Live demo is [here](http://autodafe.ws/class/Application) (you can see the source code of that file
+[here](http://autodafe.ws/file/Application)) There is also a blog system to write articles for your project on the
+same site.
 
-Сайт [autodafe.ws](http://autodafe.ws) целиком работает на ADWiki
+For example the site [autodafe.ws](http://autodafe.ws) uses **only** ADWiki
 
 ##Installation
 
-ADWiki работает на [nodejs](http://nodejs.org), а в качестве СУБД использует [MySQL](http://www.mysql.com/). Удобнее
-всего делать установку ADWiki через [npm](http://npmjs.org).
+ADWiki uses [nodejs](http://nodejs.org) as engine and DBMS [MySQL](http://www.mysql.com/) The simplest way to install
+ADWiki is to use [npm](http://npmjs.org)
 
-Сначала создайте папку, где будет лежить сайт с вашей документацией
+First, create a folder for your project documentation site
 
 ```bash
 $ mkdir your_project_docs
 $ cd your_project_docs
 ```
-
-Теперь установите ADWiki и запустите скрип, который подготовит базу данных и создаст конфигурационный файл.
+Then install ADWiki and run a script to prepare DB and make configuration file
 
 ```bash
 $ npm install adwiki
 $ node node_modules/adwiki/install
 ```
-Скрипт попросит ввести настройки для подключения к базе данных. Вы должны указать пользователя MySQL, у которого есть 
-права на создание новой базы. После завершения скрипта Вам необходимо внести информацию о Вашем проекте в файл 
-`your_project_docs/index.js`
+It's necessary to enter setting for DB connection (specified user must have permissions to create DB schemas)
 
 ##Configurations
 
-В сформированном файле `your_project_docs/index.js` Вы можете внести настройки для вашего проекта.
+You can adjust your project changing setting in `your_project_docs/index.js`
 
 ###http_port
 _default:_ 3000
 
-Порт на котором будет запущен сайт. Для продакшена рекомендуется изменить на 80
+The HTTP port to server starts on.
 
 ###user 
 _default:_ "admin"
 
-Имя администратора, который сможет создавать, редактировать и удалять статьи на сайте
+Administrator nickname. Administrator can create, edit and remove an articles on the site.
 
 ###password
 _default:_ ""
 
-Пароль администратора
+Admin password
 
 ###project.path
 _default:_ ""
 
-**Путь к файлам вашего проекта.**
-Именно здесь ADWiki будет рекурсивно просматривать файл за файлом в посках документации.
+**It's a directory which recursive search of documented files start from**
 
 ###project.start_page
 _default:_ "About project"
 
-Имя статьи, которая будет выводиться на главной странице сайта. Так как изначально этой статьи не существует, на 
-главной странице будет показано пустое место. Вам необходимо зайти на сайт, используя логин и пароль описанные выше, 
-и создать статью с таким названием.
+The title of article which is shown on the site main page. There is a blank space because the article does not exist
+initially. So you should login in the site using login and password above and create that article.
 
 ###project.name
 _default:_ "The project"
 
-Имя Вашего проекта
+Project name
 
 ###project.description
 _default:_ "project description"
 
-Краткое описание Вашего проекта
+Short project description
 
 ###project.twitter
 _default:_ ""
 
-Ссылка на твиттер Вашего проекта. Если она указана в верхней панели сайта появится воробей с ссылкой указанной здесь.
+Link to your project on twitter. A twitter bird appears on the site top panel if the link is specified.
 
 ###project.github
 _default:_ ""
 
-Ссылка на страницу на GitHub с Вашим проектом. Если она указана в верхней панели сайта появится пункт меню с ссылкой 
-указанной здесь.
+Link to your project on GitHub. It appears on the site top panel
 
 ###project.copy
 _default:_ ""
 
-Копирайт. Если указать будет отображаться в конце каждой страницы сайта
+Copyright is in the footer of every site page.
 
 ###project.author
 _default:_ ""
 
-Автор проекта записывается в мета тэг страницы
+Author of a project.
 
 ###db
-Настройки подключения к базе данных. Изначально там будут указаны настройки введеные Вами во время установки сайта.
+A database connection configuration. By default there are settings you entered while the site installation
 
-##Более тонкая настройка
-ADWiki написана на nodejs фреймворке Autodafe На сайте фреймворка есть документация, при помощи которой можно понять 
-как работает ADWiki. Для быстрых правок внешнего вида сайта посмотрите файлы в директории adwiki/views
+##Advancing settings
+ADWiki uses nodejs framework Autodafe ([link to documentation](http://autodafe.ws)) And to quick change the site
+appearance just edit the templates in `adwiki/views` folder
 
-##Обратная связь
-Если у Вас есть вопросы, предложения, Вы нашли ошибку или хотите чтобы Вам помогли организовать документацию Вашего 
-проекта, не стесняясь связывайтесь с разработчиками на GitHub или пишите email на адрес balakirev.andrey@gmail.com или 
-balakirev.vladimir@gmail.com с темой письма adwiki.
+##Feedback
+If you found an error or you have any questions and suggestions, please feel free to contact us at
+balakirev.andrey@gmail.com and balakirev.vladimir@gmail.com. We also can help you to organize your project
+documentation.
 
-Новости о системе можете читать в твиттере @node_autodafe
+We on twitter [@node_autodafe](http://twitter.com/node_autodafe)
