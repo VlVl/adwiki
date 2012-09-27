@@ -6,10 +6,10 @@ ADWiki is a system to display JavaScript documentation online. Your code should 
 ##Demo
 
 Live demo is [here](http://autodafe.ws/class/Application) (you can see the source code of that file
-[here](http://autodafe.ws/file/Application)) There is also a blog system to write articles for your project on the
+[here](code on http://autodafe.ws/file/Application)) There is also a blog system to write articles for your project on the
 same site.
 
-For example the site [autodafe.ws](http://autodafe.ws) uses **only** ADWiki
+For example the site [autodafe.ws](http://autodafe.ws) ([code on github](https://github.com/jifeon/autodafe_docs)) uses **only** ADWiki
 
 ##Installation
 
@@ -28,7 +28,7 @@ Then install ADWiki and run a script to prepare DB and make configuration file
 $ npm install adwiki
 $ node node_modules/adwiki/install
 ```
-It's necessary to enter setting for DB connection (specified user must have permissions to create DB schemas)
+It's necessary to enter settings for DB connection (specified user must have permissions to create DB schemas)
 
 ##Configurations
 
@@ -98,8 +98,8 @@ ADWiki uses nodejs framework Autodafe ([link to documentation](http://autodafe.w
 appearance just edit the templates in `adwiki/views` folder
 
 ##Feedback
-If you found an error or you have any questions and suggestions, please feel free to contact us at
+If you found an error or you have any questions or suggestions, please feel free to contact us at
 balakirev.andrey@gmail.com and balakirev.vladimir@gmail.com. We also can help you to organize your project
 documentation.
 
-We on twitter [@node_autodafe](http://twitter.com/node_autodafe)
+We are on twitter [@node_autodafe](http://twitter.com/node_autodafe)
