@@ -22,9 +22,10 @@ var config = {
     db : {
       type      : 'mysql',
       user      : 'root',
-      password  : 'LJUji9',
+      password  : '',
       database  : 'adwiki',
-      host      : 'localhost'
+      host      : 'localhost',
+      port      : 3306
     }
   }
 }
@@ -35,7 +36,8 @@ var db_questions = [
   [ 'user',     'User\'s name for connection to MySQL (user should have rights to create schemas, "root" by default):' ],
   [ 'password', 'Password for that user (empty by default):' ],
   [ 'database', 'DB schema name (will be created automatically if not exist, "adwiki" by default):' ],
-  [ 'host',     'Host where MySQL is running ("localhost" by default):' ]
+  [ 'host',     'Host where MySQL is running ("localhost" by default):' ],
+  [ 'port',     'MySQL port (3306 by default):' ]
 ];
 
 ask(0);
@@ -93,6 +95,7 @@ function app_started( e, app ){
     data.db.user      = config.components.db.user;
     data.db.password  = config.components.db.password;
     data.db.host      = config.components.db.host;
+    data.db.port      = config.components.db.port;
     data.db.database  = db_name;
 
     var file_content = [ 'require("adwiki").run(', util.inspect( data ), ');' ];

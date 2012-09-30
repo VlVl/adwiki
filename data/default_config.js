@@ -16,6 +16,7 @@ module.exports = {
     user          : 'root',
     password      : '',
     database      : 'adwiki',
-    host          : 'localhost'
+    host          : 'localhost',
+    port          : 3306
   }
 }
