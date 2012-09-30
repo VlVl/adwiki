@@ -2,7 +2,7 @@
   "name"          : "adwiki",
   "description"   : "autodafe component for generating documentation",
   "keywords"      : [ "jsdoc", "documentation", "wiki" ],
-  "version"       : "0.1.2",
+  "version"       : "0.1.3",
   "author"        : "Vladimir Balakirev <bvlvl2003@rambler.ru>",
   "contributors"  : [ "Andrey Balakirev <balakirev.andrey@gmail.com>" ],
   "repository"    : {
