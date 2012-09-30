@@ -6,7 +6,7 @@ ADWiki is a system to display JavaScript documentation online. Your code should 
 ##Demo
 
 Live demo is [here](http://autodafe.ws/class/Application) (you can see the source code of that file
-[here](code on http://autodafe.ws/file/Application)) There is also a blog system to write articles for your project on the
+[here](http://autodafe.ws/file/Application)) There is also a blog system to write articles for your project on the
 same site.
 
 For example the site [autodafe.ws](http://autodafe.ws) ([code on github](https://github.com/jifeon/autodafe_docs)) uses **only** ADWiki
@@ -108,4 +108,4 @@ If you found an error or you have any questions or suggestions, please feel free
 balakirev.andrey@gmail.com and balakirev.vladimir@gmail.com. We also can help you to organize your project
 documentation.
 
-We are on twitter [@node_autodafe](http://twitter.com/node_autodafe)
+The project on twitter [@node_autodafe](http://twitter.com/node_autodafe)
