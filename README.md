@@ -22,17 +22,23 @@ First, create a folder for your project documentation site
 $ mkdir your_project_docs
 $ cd your_project_docs
 ```
-Then install ADWiki and run a script to prepare DB and make configuration file
-
+Then install ADWiki
 ```bash
 $ npm install adwiki
+```
+Make sure you are running mysql server
+```bash
+$ sudo service mysql start
+```
+Run a script to prepare DB and make configuration file
+```bash
 $ node node_modules/adwiki/install
 ```
-It's necessary to enter settings for DB connection (specified user must have permissions to create DB schemas)
+It will be necessary to enter settings for DB connection (specified user must have permissions to create DB schemas)
 
 ##Configurations
 
-You can adjust your project changing setting in `your_project_docs/index.js`
+You can adjust your project changing settings in `your_project_docs/index.js`
 
 ###http_port
 _default:_ 3000
