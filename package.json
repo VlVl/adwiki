@@ -14,5 +14,5 @@
     "twitter-bootstrap" : ">=2.1.1",
     "less"              : ">=1.2.2"
   },
-  "engines"       : { "node": ">=0.4.0" }
+  "engines"       : { "node": ">=0.8.0" }
 }

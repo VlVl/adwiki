@@ -1,0 +1,31 @@
+{?params}
+<{+h}h4{/h}>Параметры</{+h}h4{/h}>
+<table class="table table-bordered table-condensed table-striped table-hover">
+  <tr>
+    <td>Использование</td>
+    <td colspan="2">
+      <code class="prettyprint lang-js">{+usage/}</code>
+    </td>
+  </tr>
+
+  <tr>
+    <th>Имя</th>
+    <th>Тип</th>
+    <th>Описание</th>
+  </tr>
+
+  {#params}
+  <tr>
+    <td class="text-success">
+      {name} {?default_value}<small class="muted" title="Значение по умолчанию">=&nbsp;{default_value|s}</small>
+      {:else}<i title="обязательный параметр" class="icon-asterisk pull-right"></i>{/default_value}
+    </td>
+    <td>{type|s}</td>
+    <td class="capitalize">{description|s}</td>
+  </tr>
+  {/params}
+</table>
+{:else}
+<{+h}h4{/h}>Использование</{+h}h4{/h}>
+<code class="prettyprint lang-js inline">{+usage/}</code>
+{/params}
