@@ -104,11 +104,12 @@ var config = module.exports = {
   components : {
 
     // Пользовательские компоненты
-    jsdoc_parser : {
-      dir : require('path').join( __dirname, 'node_modules/autodafe/framework' )
-    },
+//    jsdoc_parser : {
+//      dir : require('path').join( __dirname, 'node_modules/autodafe/framework' )
+//    },
 
     my_tools     : true,
+    files_parser : true,
 
     // компонент управляющий правами пользователей
     users   : {

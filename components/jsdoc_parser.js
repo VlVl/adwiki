@@ -34,7 +34,7 @@ JSDocParser.prototype._init = function ( params ) {
       };
 
   this._classes = {};
-  this.dir = path.normalize( params.dir ) || path.normalize( '..' ); 
+  this.dir = path.normalize( params.dir ) || path.normalize( '..' );
   this.collect_classes( this.dir );
   this.create_types_links();
 }
