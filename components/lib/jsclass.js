@@ -38,11 +38,12 @@ JSClass.prototype._init = function( params ){
     '@throws'       : [ 'type', 'description', 'array' ],
     '@extends'      : [ 'string' ],
 //    '@augments'     : true,
-    '@type'         : [ 'name', 'type', 'array' ],
+    '@type'         : [ 'type', 'string' ],
     '@example'      : [ 'multilines' ],
     '@description'  : [ 'multilines' ],
     '@see'          : [ 'string', 'array' ]
   };
+  this.used_RegExp = {};
 
   this.block  = {};
   this.blocks  = [];
@@ -118,6 +119,7 @@ JSClass.prototype.parse_block = function( comment, source ){
 JSClass.prototype.check_tag = function( line ){
   var tag = /\s(@.+?)\s/ig.exec( line );
   if( !tag ) return false;
+  if( !this.used_RegExp[ tag[1] ] ) this.used_RegExp[ tag[1] ] = new RegExp( tag[1] + "\\s+(\\{.+?\\})?\\s*(.*?)$" );
   return  Object.keys( this.jsdoc_tags ).indexOf( tag[ 1 ] ) != -1 ? tag[ 1 ] : false;
 }
 
@@ -127,7 +129,7 @@ JSClass.prototype.add_tag = function( lines, tag ){
     return;
   }
 
-  var re = new RegExp( tag + "\\s+(\\{.+?\\})?\\s*(.*?)$" );
+  var re = this.used_RegExp[ tag ];
   var res = re.exec( lines.shift() );
   var fields = this.jsdoc_tags[ tag ];
   if( !Array.isArray( fields ) ){
@@ -136,8 +138,8 @@ JSClass.prototype.add_tag = function( lines, tag ){
   }
 
   var tag_el = {};
-  if( fields.indexOf( 'type' ) != -1 ) tag_el.type = res[ 1 ] ? res[ 1 ].replace( /{(.+)}/, '$1' ) : null;
-  if( fields.indexOf( 'name' ) != -1 ) {
+  if( fields.indexOf( 'type' ) != -1 ) tag_el.type = this._get_type( res[ 1 ] ) ;
+  if( fields.indexOf( 'name' ) != -1 ){
     var name = res[ 2 ].trim().split( ' ' ),
         tmp;
     if( tmp = /\[(.*?)\]/.exec( name[ 0 ] ) ){
@@ -155,17 +157,19 @@ JSClass.prototype.add_tag = function( lines, tag ){
   if( fields.indexOf( 'description' ) != -1 ) tag_el.description = description;
   if( fields.indexOf( 'multilines' ) != -1 ) tag_el = description;
   if( fields.indexOf( 'string' ) != -1 ){
-    if( Object.isEmpty( tag_el ) ) tag_el = res[ 2 ];
-    else {
-      for( i in tag_el ) var value = tag_el[ i ];
-      tag_el = value;
-    }
-//    tag_el = Object.isEmpty( tag_el ) ? tag_el = res[ 2 ] : ;
+    tag_el = Object.isEmpty( tag_el ) ? tag_el = res[ 2 ] : tag_el[ Object.keys( tag_el)[0] ];
   }
 
   if( !this.block[ tag ] )
     this.block[ tag ] = ( fields.indexOf( 'array' ) != -1 ) ? [ tag_el ] : tag_el;
   else if( fields.indexOf( 'array' ) != -1 ) this.block[ tag ].push( tag_el );
+}
+
+JSClass.prototype._get_type = function( str ){
+  if( !str ) return null;
+  str = str.replace( /{(.+)}/, '$1' )
+  if( !/|/.test( str ) ) return { name : str, type : str };
+  return str.split( '|').map( function( type ){ return { name : type, type : type } } );
 }
 
 JSClass.prototype.extract_method_name = function( source ){

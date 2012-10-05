@@ -1,4 +1,4 @@
-{?params}
+{?param}
 <{+h}h4{/h}>Параметры</{+h}h4{/h}>
 <table class="table table-bordered table-condensed table-striped table-hover">
   <tr>
@@ -14,18 +14,18 @@
     <th>Описание</th>
   </tr>
 
-  {#params}
+  {#param}
   <tr>
     <td class="text-success">
-      {name} {?default_value}<small class="muted" title="Значение по умолчанию">=&nbsp;{default_value|s}</small>
-      {:else}<i title="обязательный параметр" class="icon-asterisk pull-right"></i>{/default_value}
+      {name} {?default_value}<small class="muted" title="Значение по умолчанию">=&nbsp;{default_value|s}</small>{/default_value}
+      {?required}<i title="обязательный параметр" class="icon-asterisk pull-right"></i>{/required}
     </td>
-    <td>{type|s}</td>
+    <td>{#type}{type|s}{@sep}<br>{/sep}{/type}</td>
     <td class="capitalize">{description|s}</td>
   </tr>
-  {/params}
+  {/param}
 </table>
 {:else}
 <{+h}h4{/h}>Использование</{+h}h4{/h}>
 <code class="prettyprint lang-js inline">{+usage/}</code>
-{/params}
+{/param}

@@ -77,7 +77,7 @@
             <i class="icon-lock pull-right" title="private"></i>
             {/private}
           </td>
-          <td>{type|s}</td>
+          <td>{#type}{type|s}{@sep}<br>{/sep}{/type}</td>
           <td class="capitalize">{short_description|s}</td>
         </tr>
         {/class.properties}
@@ -133,9 +133,9 @@
 
       {>"wiki/parts/method_params.html":class.constructor/}
       {<h}h3{/h}
-      {<usage}new {class.className}({?class.constructor.params} {#class.constructor.top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/class.constructor.top_params} {/class.constructor.params});{/usage}
+      {<usage}new {class.className}({?class.constructor.param} {#class.constructor.top_params}{#type}{type|s} {/type}{name}{@sep}, {/sep}{/class.constructor.top_params} {/class.constructor.param});{/usage}
 
-      {?class.constructor.method_throws}
+      {?class.constructor.throws}
         <h3>Возможные ошибки</h3>
         <table class="table table-bordered table-condensed table-striped table-hover">
           <tr>
@@ -144,7 +144,7 @@
           </tr>
           {#class.constructor.throws}
           <tr>
-            <td>{type}</td>
+            <td>{#type}{type|s}{/type}</td>
             <td class="capitalize">{description|s}</td>
           </tr>
           {/class.constructor.throws}
@@ -179,7 +179,7 @@
           <tr>
             <td>Использование</td>
             <td colspan="2">
-              <code class="prettyprint lang-js">{clazz}.on( '{event_name}', function( {#top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/top_params} ){} );</code>
+              <code class="prettyprint lang-js">{clazz}.on( '{event_name}', function( {#top_params}{?type}{type|s} {/type}{name}{@sep}, {/sep}{/top_params} ){} );</code>
             </td>
           </tr>
 
@@ -192,7 +192,7 @@
           {#param}
           <tr>
             <td class="text-success"> {name}</td>
-            <td>{type|s}</td>
+            <td>{#type}{type|s}{/type}</td>
             <td class="capitalize">{description|s}</td>
           </tr>
           {/param}
@@ -229,7 +229,7 @@
           <small><i class="icon-lock" title="private"></i></small>
           {/private}
           {?static}<small>static</small>{/static}
-          {?type}<small>экземпляр {type|s}</small>{/type}
+          {#type}<small>экземпляр {type|s}{@sep},{/sep}</small>{/type}
         </h3>
 
         <p class="capitalize">{#description}{.|s}{@sep}</p><p class="capitalize">{/sep}{/description}</p>
@@ -270,7 +270,7 @@
 
         {>"{cd}/parts/method_params.html"/}
         {<h}h4{/h}
-        {<usage}{@if cond="'{privacy}' == 'private'"}this{:else}{clazz}{/if}.{name}({?params} {#top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/top_params} {/params});{/usage}
+        {<usage}{?private}this{:else}{clazz}{/private}.{name}({#top_params}{?type}{type|s} {/type}{name}{@sep}, {/sep}{/top_params});{/usage}
 
         {?throws}
         <h4>Возможные ошибки</h4>
@@ -281,18 +281,18 @@
           </tr>
           {#throws}
           <tr>
-            <td>{type}</td>
+            <td>{#type}{type|s}{@sep},{/sep}{/type}</td>
             <td class="capitalize">{description|s}</td>
           </tr>
           {/throws}
         </table>
         {/throws}
-        
+
         {?returns}
           <h4>Возвращает</h4>
           <table class="table table-bordered table-condensed table-striped table-hover">
             <tr>
-              <td>{returns.type|s}</td>
+              <td>{#returns.type}{type|s}{@sep},{/sep}{/returns.type}</td>
               <td class="capitalize">{returns.description|s}</td>
             </tr>
           </table>

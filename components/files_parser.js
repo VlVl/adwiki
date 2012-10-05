@@ -26,7 +26,10 @@ FilesParser.prototype._init = function ( params ) {
   this._classes = {};
 //  this.dir = path.normalize( params.dir ) || path.normalize( '..' );
   this.dir = path.normalize( __dirname + '/../_debug' );
+
   this.current_className = '';
+  this.re = /{\s@link\s+(.+?)}/ig;
+
   this.collect_classes( this.dir );
   this.create_links();
 }
@@ -90,8 +93,7 @@ FilesParser.prototype._create_links = function( obj ){
       case 'example'           :
       case 'description'       :
       case 'short_description' : obj[ tag ] = this.find_links_in_description( obj[ tag ]);break;
-      case 'type'              : if( this.names.indexOf( obj.type ) != -1 ) obj.type = this.link( obj.type );
-                                 break;
+      case 'type'              : obj[ tag ] = this.find_links_in_type( obj[ tag ]);break;
       case 'see'               : obj[ tag ] = this.find_links_in_see( obj[ tag ]);break;
       case 'source'            : break;
       default                  :
@@ -106,22 +108,31 @@ FilesParser.prototype._create_links = function( obj ){
 }
 
 FilesParser.prototype.find_links_in_description = function( descr ){
-  var self = this, re = /{\s@link\s+(.+?)}/ig;
+  var self = this;
   if( !Array.isArray( descr ) )
-      descr = descr.replace( re, function( str, p1 ) { return self.link( p1 ) } );
+      descr = descr.replace( this.re, function( str, p1 ) { return self.link( p1 ) } );
   else
-  for( var i = 0, ln = descr.length; i< ln; i++ )
-    descr[ i ] = descr[ i ].replace( re, function( str, p1 ) { return self.link( p1 ) } );
+  for( var i = 0, ln = descr.length; i < ln; i++ )
+    descr[ i ] = descr[ i ].replace( this.re, function( str, p1 ) { return self.link( p1 ) } );
   return descr;
 
 }
 
 FilesParser.prototype.find_links_in_see = function( see ){
   if( Array.isArray( see ) )
-    for( var j = 0, ln = see.length; j< ln; j++ )
+    for( var j = 0, ln = see.length; j < ln; j++ )
       see[ j ] = this.link( see[ j ] );
   else see = this.link( see );
   return see;
+}
+
+FilesParser.prototype.find_links_in_type = function( type ){
+  if( Array.isArray( type ) )
+    for( var j = 0, ln = type.length; j < ln; j++ )
+      if( this.names.indexOf( type[j].type ) != -1 ) type[ j ].type = this.link( type[ j ].type );
+  else
+      if( this.names.indexOf( type.type ) != -1 ) type.type = this.link( type.type );
+  return type;
 }
 
 FilesParser.prototype.link = function( str ){
