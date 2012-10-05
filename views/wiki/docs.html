@@ -72,10 +72,10 @@
         {#class.properties}
         <tr>
           <td>
-            <a href="#{trim_name}">{name}</a>
-            {@if cond="'{privacy}' == 'private'"}
-            <i class="icon-lock pull-right" title="{privacy}"></i>
-            {/if}
+            <a href="#{name}">{name}</a>
+            {?private}
+            <i class="icon-lock pull-right" title="private"></i>
+            {/private}
           </td>
           <td>{type|s}</td>
           <td class="capitalize">{short_description|s}</td>
@@ -104,10 +104,10 @@
         {#class.methods}
         <tr>
           <td>
-            <a href="#{trim_name}">{name}</a>
-            {@if cond="'{privacy}' == 'private'"}
-            <i class="icon-lock pull-right" title="{privacy}"></i>
-            {/if}
+            <a href="#{name}">{name}</a>
+            {?private}
+            <i class="icon-lock pull-right" title="private"></i>
+            {/private}
           </td>
           <td class="capitalize">{short_description|s}</td>
         </tr>
@@ -131,7 +131,7 @@
         <p>{.|s}</p>
       {/class.constructor.description}
 
-      {?class.constructor.params}
+      {?class.constructor.param}
         <h3>Параметры</h3>
         <table class="table table-bordered table-condensed table-striped table-hover">
           <tr>
@@ -147,7 +147,7 @@
             <th>Описание</th>
           </tr>
 
-          {#class.constructor.params}
+          {#class.constructor.param}
           <tr>
             <td class="text-success">
               {name} {?default_value}<small class="muted" title="Значение по умолчанию">={default_value|s}</small>
@@ -156,29 +156,29 @@
             <td>{type|s}</td>
             <td class="capitalize">{description|s}</td>
           </tr>
-          {/class.constructor.params}
+          {/class.constructor.param}
         </table>
       {:else}
         <h3>Использование</h3>
         <code class="prettyprint lang-js inline">new {class.className}();</code>
-      {/class.constructor.params}
+      {/class.constructor.param}
 
 
-      {?class.constructor.method_throws}
+      {?class.constructor.throws}
         <h3>Возможные ошибки</h3>
         <table class="table table-bordered table-condensed table-striped table-hover">
           <tr>
             <th>Тип ошибки</th>
             <th>Условия возникновения</th>
           </tr>
-          {#class.constructor.method_throws}
+          {#class.constructor.throws}
           <tr>
             <td>{type}</td>
             <td class="capitalize">{description|s}</td>
           </tr>
-          {/class.constructor.method_throws}
+          {/class.constructor.throws}
         </table>
-      {/class.constructor.method_throws}
+      {/class.constructor.throws}
 
       {?class.constructor.example}
       <div class="example">
@@ -202,7 +202,7 @@
         <h3>{event_name}</h3>
         <p class="capitalize">{#description}{.|s}{@sep}</p><p class="capitalize">{/sep}{/description}</p>
 
-        {?params}
+        {?param}
         <h4>Параметры</h4>
         <table class="table table-bordered table-condensed table-striped table-hover">
           <tr>
@@ -218,18 +218,18 @@
             <th>Описание</th>
           </tr>
 
-          {#params}
+          {#param}
           <tr>
             <td class="text-success"> {name}</td>
             <td>{type|s}</td>
             <td class="capitalize">{description|s}</td>
           </tr>
-          {/params}
+          {/param}
         </table>
         {:else}
           <h4>Использование</h4>
           <code class="prettyprint lang-js inline">{clazz}.on( '{event_name}', function(){});</code>
-        {/params}
+        {/param}
 
         {?example}
         <div class="example">
@@ -251,12 +251,12 @@
       <header><h2>Свойства</h2></header>
 
       {#class.properties clazz=class.className}
-      <section id="{trim_name}">
+      <section id="{name}">
         <h3>
           {name}
-          {@if cond="'{privacy}' == 'private'"}
-          <small><i class="icon-lock" title="{privacy}"></i></small>
-          {/if}
+          {?private}
+          <small><i class="icon-lock" title="private"></i></small>
+          {/private}
           {?static}<small>static</small>{/static}
           {?type}<small>экземпляр {type|s}</small>{/type}
         </h3>
@@ -264,7 +264,7 @@
         <p class="capitalize">{#description}{.|s}{@sep}</p><p class="capitalize">{/sep}{/description}</p>
 
         <h4>Использование</h4>
-        <code class="prettyprint lang-js inline">{@if cond="'{privacy}' == 'private'"}this{:else}{clazz}{/if}.{name};</code>
+        <code class="prettyprint lang-js inline">{?private}this{:else}{clazz}{/private}.{name};</code>
 
         {?example}
         <div class="example">
@@ -285,25 +285,25 @@
       <header><h2>Методы</h2></header>
 
       {#class.methods clazz=class.className}
-      <section id="{trim_name}">
+      <section id="{name}">
         <h3>
           {name}
-          {@if cond="'{privacy}' == 'private'"}
-          <small><i class="icon-lock" title="{privacy}"></i></small>
-          {/if}
+          {?private}
+          <small><i class="icon-lock" title="private"></i></small>
+          {/private}
           {?static}<small>static</small>{/static}
           <small>возвращает {?returns}{returns.type|s}{:else}<code class="prettyprint lang-js inline">undefined</code>{/returns}</small>
         </h3>
 
         <p class="capitalize">{#description}{.|s}{@sep}</p><p class="capitalize">{/sep}{/description}</p>
 
-        {?params}
+        {?param}
           <h4>Параметры</h4>
           <table class="table table-bordered table-condensed table-striped table-hover">
             <tr>
               <td>Использование</td>
               <td colspan="2">
-                <code class="prettyprint lang-js">{@if cond="'{privacy}' == 'private'"}this{:else}{clazz}{/if}.{name}( {#top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/top_params} );</code>
+                <code class="prettyprint lang-js">{?private}this{:else}{clazz}{/private}.{name}( {#top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/top_params} );</code>
               </td>
             </tr>
   
@@ -313,37 +313,37 @@
               <th>Описание</th>
             </tr>
   
-            {#params}
+            {#param}
             <tr>
               <td class="text-success">
-                {name} {?default_value}<small class="muted" title="Значение по умолчанию">={default_value|s}</small>
-                {:else}<i title="обязательный параметр" class="icon-asterisk pull-right"></i>{/default_value}
+                {name} {?default_value}<small class="muted" title="Значение по умолчанию">={default_value|s}</small>{/default_value}
+                {?required}<i title="обязательный параметр" class="icon-asterisk pull-right"></i>{/required}
               </td>
               <td>{type|s}</td>
               <td class="capitalize">{description|s}</td>
             </tr>
-            {/params}
+            {/param}
           </table>
           {:else}
           <h4>Использование</h4>
           <code class="prettyprint lang-js inline">{clazz}.{name}();</code>
-        {/params}
+        {/param}
 
-        {?method_throws}
+        {?throws}
         <h4>Возможные ошибки</h4>
         <table class="table table-bordered table-condensed table-striped table-hover">
           <tr>
             <th>Тип ошибки</th>
             <th>Условия возникновения</th>
           </tr>
-          {#method_throws}
+          {#throws}
           <tr>
             <td>{type}</td>
             <td class="capitalize">{description|s}</td>
           </tr>
-          {/method_throws}
+          {/throws}
         </table>
-        {/method_throws}
+        {/throws}
         
         {?returns}
           <h4>Возвращает</h4>
