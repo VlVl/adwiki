@@ -131,40 +131,11 @@
         <p>{.|s}</p>
       {/class.constructor.description}
 
-      {?class.constructor.param}
-        <h3>Параметры</h3>
-        <table class="table table-bordered table-condensed table-striped table-hover">
-          <tr>
-            <td>Использование</td>
-            <td colspan="2">
-              <code class="prettyprint lang-js">new {class.className}( {#class.constructor.top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/class.constructor.top_params} );</code>
-            </td>
-          </tr>
+      {>"wiki/parts/method_params.html":class.constructor/}
+      {<h}h3{/h}
+      {<usage}new {class.className}({?class.constructor.params} {#class.constructor.top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/class.constructor.top_params} {/class.constructor.params});{/usage}
 
-          <tr>
-            <th>Имя</th>
-            <th>Тип</th>
-            <th>Описание</th>
-          </tr>
-
-          {#class.constructor.param}
-          <tr>
-            <td class="text-success">
-              {name} {?default_value}<small class="muted" title="Значение по умолчанию">={default_value|s}</small>
-              {:else}<i title="обязательный параметр" class="icon-asterisk pull-right"></i>{/default_value}
-            </td>
-            <td>{type|s}</td>
-            <td class="capitalize">{description|s}</td>
-          </tr>
-          {/class.constructor.param}
-        </table>
-      {:else}
-        <h3>Использование</h3>
-        <code class="prettyprint lang-js inline">new {class.className}();</code>
-      {/class.constructor.param}
-
-
-      {?class.constructor.throws}
+      {?class.constructor.method_throws}
         <h3>Возможные ошибки</h3>
         <table class="table table-bordered table-condensed table-striped table-hover">
           <tr>
@@ -297,37 +268,9 @@
 
         <p class="capitalize">{#description}{.|s}{@sep}</p><p class="capitalize">{/sep}{/description}</p>
 
-        {?param}
-          <h4>Параметры</h4>
-          <table class="table table-bordered table-condensed table-striped table-hover">
-            <tr>
-              <td>Использование</td>
-              <td colspan="2">
-                <code class="prettyprint lang-js">{?private}this{:else}{clazz}{/private}.{name}( {#top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/top_params} );</code>
-              </td>
-            </tr>
-  
-            <tr>
-              <th>Имя</th>
-              <th>Тип</th>
-              <th>Описание</th>
-            </tr>
-  
-            {#param}
-            <tr>
-              <td class="text-success">
-                {name} {?default_value}<small class="muted" title="Значение по умолчанию">={default_value|s}</small>{/default_value}
-                {?required}<i title="обязательный параметр" class="icon-asterisk pull-right"></i>{/required}
-              </td>
-              <td>{type|s}</td>
-              <td class="capitalize">{description|s}</td>
-            </tr>
-            {/param}
-          </table>
-          {:else}
-          <h4>Использование</h4>
-          <code class="prettyprint lang-js inline">{clazz}.{name}();</code>
-        {/param}
+        {>"{cd}/parts/method_params.html"/}
+        {<h}h4{/h}
+        {<usage}{@if cond="'{privacy}' == 'private'"}this{:else}{clazz}{/if}.{name}({?params} {#top_params}{?type}[{type|s}] {/type}{name}{@sep}, {/sep}{/top_params} {/params});{/usage}
 
         {?throws}
         <h4>Возможные ошибки</h4>
@@ -362,6 +305,7 @@
         {/example}
 
         {>"{cd}/parts/see.html" see=see/}
+        {<h}h4{/h}
       </section>
       {@sep}<hr/>{/sep}
       {/class.methods}
