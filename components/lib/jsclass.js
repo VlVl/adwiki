@@ -4,7 +4,7 @@ var fs        = require('fs');
 module.exports = JSClass.inherits( AutodafePart );
 
 function JSClass( params ){
-  return this._init( params );
+  this._init( params );
 }
 
 JSClass.prototype._init = function( params ){
@@ -51,7 +51,6 @@ JSClass.prototype._init = function( params ){
   this.parse_file( params.path );
   this.class = this.create_class( params.path );
 
-  return this;
 }
 
 JSClass.prototype.parse_file = function( path ){
