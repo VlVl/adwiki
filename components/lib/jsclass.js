@@ -48,14 +48,13 @@ JSClass.prototype._init = function( params ){
   this.block  = {};
   this.blocks  = [];
 
-  this.parse_file( params.path );
-  this.class = this.create_class( params.path );
+  this.class = this.parse_file( params.path ) ? this.create_class( params.path ) : null;
 
 }
 
 JSClass.prototype.parse_file = function( path ){
   var data = fs.readFileSync( path, 'utf8' ) + '';
-//  if( !this.re.constructor.test( data ) ) return false;
+  if( !/constructor/.test( data ) ) return false;
   var comment = [],
       source  = [],
       text,

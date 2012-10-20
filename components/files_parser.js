@@ -24,8 +24,7 @@ FilesParser.prototype._init = function ( params ) {
   FilesParser.parent._init.call( this, params );
 
   this._classes = {};
-//  this.dir = path.normalize( params.dir ) || path.normalize( '..' );
-  this.dir = path.normalize( __dirname + '/../_debug' );
+  this.dir = path.normalize( params.dir ) || path.normalize( '..' );
 
   this.current_className = '';
   this.re = /{\s@link\s+(.+?)}/ig;
@@ -56,9 +55,9 @@ FilesParser.prototype.add_file = function( file_path ){
   var clazz;
   switch ( path.extname( file_path ) ) {
     case '.js'   : clazz = ( new jsclass( { path : file_path }) ).class;break;
-    case '.json' : clazz = require( file_path );break;
+//    case '.json' : clazz = require( file_path );break;
   }
-  this.add_class( clazz );
+  if( clazz ) this.add_class( clazz );
 }
 
 FilesParser.prototype.get_class_by_name = function( className ){

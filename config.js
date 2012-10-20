@@ -109,8 +109,9 @@ var config = module.exports = {
 //    },
 
     my_tools     : true,
-    files_parser : true,
-
+    files_parser : {
+      dir : require('path').join( __dirname, 'node_modules/autodafe/framework' )
+    },
     // компонент управляющий правами пользователей
     users   : {
       model   : 'user',
