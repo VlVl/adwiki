@@ -78,7 +78,7 @@ FilesParser.prototype.get_classes = function () {
 
 FilesParser.prototype.create_links = function(){
   this.names = this.get_classes_names();
-  for( clazz in this._classes ){
+  for( var clazz in this._classes ){
     this.current_className = clazz;
     this._create_links( this._classes[ clazz ] );
   }

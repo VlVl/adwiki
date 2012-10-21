@@ -54,7 +54,7 @@ JSClass.prototype._init = function( params ){
 
 JSClass.prototype.parse_file = function( path ){
   var data = fs.readFileSync( path, 'utf8' ) + '';
-  if( !/constructor/.test( data ) ) return false;
+  if( !/@constructor/.test( data ) ) return false;
   var comment = [],
       source  = [],
       text,
@@ -80,7 +80,7 @@ JSClass.prototype.parse_file = function( path ){
     if( i == ln-1 )
       this.parse_block( comment, source );
   }
-
+   return true;
 }
 
 JSClass.prototype.parse_block = function( comment, source ){
@@ -165,7 +165,7 @@ JSClass.prototype.add_tag = function( lines, tag ){
 
 JSClass.prototype._get_type = function( str ){
   if( !str ) return null;
-  str = str.replace( /{(.+)}/, '$1' )
+  str = str.replace( /{(.+)}/, '$1' );
   if( !/|/.test( str ) ) return { name : str, type : str };
   return str.split( '|').map( function( type ){ return { name : type, type : type } } );
 }
@@ -209,11 +209,12 @@ JSClass.prototype.get_arrays = function(){
   };
 
   this.blocks.forEach( function( block ){
-    var b = {
-      short_description : Array.isArray( block[ '@description' ] ) ? block[ '@description' ][ 0 ] : block[ '@description' ]
-    };
 
-    for( i in block ) b[ i.substring(1) ] = block[ i ];
+    var b = block[ '@description' ] ? {
+      short_description : Array.isArray( block[ '@description' ] ) ? block[ '@description' ][ 0 ] : block[ '@description' ]
+    } : {};
+
+    for( var i in block ) b[ i.substring(1) ] = block[ i ];
 
     if( b.param ) b.top_params = b.param.filter(function( param ){
       return !/\./.test( param.name );
