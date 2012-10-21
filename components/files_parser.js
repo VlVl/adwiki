@@ -25,6 +25,7 @@ FilesParser.prototype._init = function ( params ) {
 
   this._classes = {};
   this.dir = path.normalize( params.dir ) || path.normalize( '..' );
+//  this.dir = path.normalize( __dirname + '/../_debug' );
 
   this.current_className = '';
   this.re = /{\s@link\s+(.+?)}/ig;
@@ -128,14 +129,17 @@ FilesParser.prototype.find_links_in_see = function( see ){
 FilesParser.prototype.find_links_in_type = function( type ){
   if( Array.isArray( type ) )
     for( var j = 0, ln = type.length; j < ln; j++ )
-      if( this.names.indexOf( type[j].type ) != -1 ) type[ j ].type = this.link( type[ j ].type );
+//      if( this.names.indexOf( type[j].type ) != -1 )
+        type[ j ].type = this.link( type[ j ].type );
   else
-      if( this.names.indexOf( type.type ) != -1 ) type.type = this.link( type.type );
+//      if( this.names.indexOf( type.type ) != -1 )
+        type.type = this.link( type.type );
   return type;
 }
 
 FilesParser.prototype.link = function( str ){
   var tmp = str.split( '.' );
+  if( this.names.indexOf( tmp[ 0 ] ) == -1 ) return str;
   var link = '<a href="' + this.app.router.create_url( 'wiki.docs', { class : tmp[ 0 ] });
   if ( tmp[ 1 ] ) link += ( '#' + tmp[ 1 ] );
   else if( tmp[ 0 ] == this.current_className ) link += ( '#' + tmp[ 0 ] );

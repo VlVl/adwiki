@@ -35,8 +35,8 @@ Wiki.prototype.docs = function ( response, request ) {
   if ( !clazz ) return response.send();
 
   var parents = [], parent = clazz;
-  while( parent = parser.get_class_by_name( parent.constructor.extends.description ) )
-    parents.push( parent.className );
+    while( parent = parser.get_class_by_name( parent.constructor.extends ) )
+      parents.push( parent.className );
 
   response.send({
     parents : parents,

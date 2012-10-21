@@ -263,7 +263,8 @@
           <small><i class="icon-lock" title="private"></i></small>
           {/private}
           {?static}<small>static</small>{/static}
-          <small>возвращает {?returns}{returns.type|s}{:else}<code class="prettyprint lang-js inline">undefined</code>{/returns}</small>
+          <small>возвращает {?returns.type}{#returns.type}{type|s}{@sep},{/sep}{/returns.type}
+            {:else}<code class="prettyprint lang-js inline">undefined</code>{/returns.type}</small>
         </h3>
 
         <p class="capitalize">{#description}{.|s}{@sep}</p><p class="capitalize">{/sep}{/description}</p>

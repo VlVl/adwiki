@@ -30,20 +30,27 @@ JSClass.prototype._init = function( params ){
     '@param'        : [ 'name', 'type', 'description', 'array' ],
     '@property'     : [ 'name', 'type', 'description', 'array' ],
     '@returns'      : [ 'type', 'description' ],
+    '@return'       : [ 'type', 'description', 'eq:returns' ],
     '@public'       : true,
     '@private'      : true,
     '@protected'    : true,
     '@static'       : true,
-    '@field'        : [ 'name', 'type', 'description', 'array' ],
+    '@field'        : true,
     '@throws'       : [ 'type', 'description', 'array' ],
     '@extends'      : [ 'string' ],
 //    '@augments'     : true,
     '@type'         : [ 'type', 'string' ],
     '@example'      : [ 'multilines' ],
     '@description'  : [ 'multilines' ],
-    '@see'          : [ 'string', 'array' ]
+    '@see'          : [ 'string', 'array' ],
+    '@since'        : ['string'],
+    '@namespace'    : true,
+    '@default'      : ['string']
   };
-  this.used_RegExp = {};
+  this.used_RegExp = {
+    tag : /\s(@.+?)\s/ig,
+    eq  : /eq:(.+)/
+  };
 
   this.block  = {};
   this.blocks  = [];
@@ -63,7 +70,8 @@ JSClass.prototype.parse_file = function( path ){
   for ( var i = 0, ln = lines.length; i < ln; i++ ) {
     var line = lines[i];
 
-    if ( this.re.block_tags.startBlock.test( line ) ) {
+    if( this.re.block_tags.inline.test( line ) ) source.push( line );
+    else if ( this.re.block_tags.startBlock.test( line ) ) {
       if( comment.length > 0 ){
         this.parse_block( comment, source );
         comment = [];
@@ -74,9 +82,8 @@ JSClass.prototype.parse_file = function( path ){
     } else if ( this.re.block_tags.blockComment.test( line ) ){
         text = this.re.block_tags.blockComment.exec( line )[1] ;
         comment.push( text.replace(/@/g,' @') + ' ' );
-    } else if( line != '' && !this.re.block_tags.inline.test( line ) && comment.length > 0 )
+    } else if( line != '' && comment.length > 0 )
         source.push( line );
-
     if( i == ln-1 )
       this.parse_block( comment, source );
   }
@@ -115,7 +122,8 @@ JSClass.prototype.parse_block = function( comment, source ){
 }
 
 JSClass.prototype.check_tag = function( line ){
-  var tag = /\s(@.+?)\s/ig.exec( line );
+  var re = this.used_RegExp.tag;
+  var tag = /\s(@.+?)\s/.exec( line );
   if( !tag ) return false;
   if( !this.used_RegExp[ tag[1] ] ) this.used_RegExp[ tag[1] ] = new RegExp( tag[1] + "\\s+(\\{.+?\\})?\\s*(.*?)$" );
   return  Object.keys( this.jsdoc_tags ).indexOf( tag[ 1 ] ) != -1 ? tag[ 1 ] : false;
@@ -155,8 +163,10 @@ JSClass.prototype.add_tag = function( lines, tag ){
   if( fields.indexOf( 'description' ) != -1 ) tag_el.description = description;
   if( fields.indexOf( 'multilines' ) != -1 ) tag_el = description;
   if( fields.indexOf( 'string' ) != -1 ){
-    tag_el = Object.isEmpty( tag_el ) ? tag_el = res[ 2 ] : tag_el[ Object.keys( tag_el)[0] ];
+    tag_el = Object.isEmpty( tag_el ) ? tag_el = res[ 2 ].trim() : tag_el[ Object.keys( tag_el )[0] ];
   }
+  var eq = this._check_eq( fields );
+  if( eq ) tag = '@' + eq;
 
   if( !this.block[ tag ] )
     this.block[ tag ] = ( fields.indexOf( 'array' ) != -1 ) ? [ tag_el ] : tag_el;
@@ -164,10 +174,18 @@ JSClass.prototype.add_tag = function( lines, tag ){
 }
 
 JSClass.prototype._get_type = function( str ){
-  if( !str ) return null;
-  str = str.replace( /{(.+)}/, '$1' );
+  if( !str ) return { name : '', type : '' };
+  str = str.replace( /{(.+)}/, '$1').trim();
   if( !/|/.test( str ) ) return { name : str, type : str };
   return str.split( '|').map( function( type ){ return { name : type, type : type } } );
+}
+
+JSClass.prototype._check_eq = function( fields ){
+  var result;
+  for( var i = 0, ln = fields.length; i < ln; i++ )
+    if( result = this.used_RegExp.eq.exec( fields[ i ] ) )
+      return result[1];
+  return false;
 }
 
 JSClass.prototype.extract_method_name = function( source ){
@@ -219,28 +237,40 @@ JSClass.prototype.get_arrays = function(){
     if( b.param ) b.top_params = b.param.filter(function( param ){
       return !/\./.test( param.name );
     });
-    if( block[ '@event' ] ){
-      var tmp = block[ '@name' ].split( '#' );
-      b.event_name = tmp[ 1 ] ? tmp[ 1 ].trim() : tmp[ 0 ].trim();
-      result.events.push( b );
-    } else {
-      if( !block[ '@name' ] ) {
-        if( b.name = self.extract_method_name( block[ '@source' ] ) ) result.methods.push( b );
-        else {
-          b.name = self.extract_property_name( block[ '@source' ] );
-          result.properties.push( b );
-        }
-      } else {
-        // если у метода или свойства имя указано тегом
-        ( /function/.test( block[ '@source' ][0] )) ? result.methods.push( b ) : result.properties.push( b );
-      }
-    }
+    b = self._get_block_type( b, block );
+    result[ b.block_type ].push( b );
     if( block[ '@constructor' ] ) result.constructor = result.methods.pop();
-  })
-  result.methods    = this.sort_array( result.methods );
-  result.events     = this.sort_array( result.events );
-  result.properties = this.sort_array( result.properties );
+  });
+  [ 'methods', 'events', 'properties' ].forEach( function( a ){
+    result[ a ] = self.sort_array( result[ a ] );
+  });
+//  result.methods    = this.sort_array( result.methods );
+//  result.events     = this.sort_array( result.events );
+//  result.properties = this.sort_array( result.properties );
   return result;
+}
+
+JSClass.prototype._get_block_type = function( b, block ){
+  if( block[ '@event' ] ){
+    var tmp = block[ '@name' ].split( '#' );
+    b.event_name = tmp[ 1 ] ? tmp[ 1 ].trim() : tmp[ 0 ].trim();
+    b.block_type = 'events';
+    return b;
+  }
+  if( block[ '@field' ] ){
+    b.block_type = 'properties';
+    return b;
+  }
+  if( block[ '@name' ] ){
+    b.block_type = ( /function/.test( block[ '@source' ][0] )) ? 'methods' : 'properties';
+    return b;
+  }
+  if( b.name = this.extract_method_name( block[ '@source' ] ) ) b.block_type = 'methods';
+  else {
+      b.name = this.extract_property_name( block[ '@source' ] );
+      b.block_type = 'properties';
+    }
+  return b;
 }
 
 JSClass.prototype.sort_array = function( array ){
