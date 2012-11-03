@@ -55,7 +55,10 @@
         <a class="brand" href="/">{project.name}</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
-            <li class='{@if cond="\"{page}\" == \"docs\""}active{/if}'><a href="{#url}wiki.docs{/url}">Документация</a></li>
+            <li class='{@if cond="\"{page}\" == \"docs\""}active{/if}'>
+              <a href="{#url}wiki.docs{/url}">Документация</a>
+            </li>
+            <li><a href="{#url}wiki.reload{/url}"><i class="icon-refresh icon-white"></i></a></li>
             <li class='dropdown {@if cond="\"{page}\" == \"blog\""}active{/if}'>
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                 Статьи

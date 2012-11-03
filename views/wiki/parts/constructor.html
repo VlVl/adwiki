@@ -1,0 +1,43 @@
+{?class.constructor}
+<section id="{class.className}">
+  <header>
+    <h2>Конструктор {class.className}</h2>
+    {?parents}
+    Унаследован от {#parents}<a href="{#url class=.}wiki.docs{/url}">{.}</a>{@sep}, {/sep}{/parents}
+    {/parents}
+  </header>
+
+  {#class.constructor.description}
+  <p>{.|s}</p>
+  {/class.constructor.description}
+
+  {>"wiki/parts/method_params.html":class.constructor/}
+  {<h}h3{/h}
+  {<usage}new {name}({?param} {#top_params}{#type}{type|s}{@sep}|{/sep}{/type} {name}{@sep}, {/sep}{/top_params} {/param});{/usage}
+
+  {?class.constructor.throws}
+  <h3>Возможные ошибки</h3>
+  <table class="table table-bordered table-condensed table-striped table-hover">
+    <tr>
+      <th>Тип ошибки</th>
+      <th>Условия возникновения</th>
+    </tr>
+    {#class.constructor.throws}
+    <tr>
+      <td>{#type}{type|s}{@sep}|{/sep}{/type}</td>
+      <td class="capitalize">{description|s}</td>
+    </tr>
+    {/class.constructor.throws}
+  </table>
+  {/class.constructor.throws}
+
+  {?class.constructor.example}
+  <div class="example">
+    <p>{#class.constructor.example}{.|s}<br>{~n}{/class.constructor.example}</p>
+  </div>
+  {/class.constructor.example}
+
+  {>"{cd}/parts/see.html" see=class.constructor.see/}
+  {<h}h3{/h}
+</section>
+{/class.constructor}

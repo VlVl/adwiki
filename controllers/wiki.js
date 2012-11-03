@@ -56,6 +56,6 @@ Wiki.prototype.file = function( response, request ){
 
 
 Wiki.prototype.reload = function( response, request ){
-  if (request.user.can( 'reload_adwiki' )) this.app.jsdoc_parser.reload();
+  if (request.user.can( 'reload_adwiki' )) this.app.files_parser.reload();
   request.redirect( request.original_request.headers.referer );
 }

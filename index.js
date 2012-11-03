@@ -7,8 +7,8 @@ exports.run = function( options ){
   if ( options.http_port )
     config.components.http.port = options.http_port;
 
-//  if ( options.project )
-//    config.components.jsdoc_parser.dir = options.project.path;
+  if ( options.project )
+    config.components.files_parser.dir = options.project.path;
 
   config.params['login']    = options.user;
   config.params['pass']     = options.password;
